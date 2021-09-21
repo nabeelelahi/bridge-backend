@@ -1,0 +1,39 @@
+CONSTANTS
+---------
+PROTOCOL = http://
+IP/DOMAIN =  192.168.0.127 
+PORT = 9000
+DEV_BASEURL = bridge.com/api/v1
+
+
+SAMPLE URL FOR TESTING IF BACKEND IS RESPONDING OR NOT
+------------------------------------------------------
+
+http://192.168.0.127:9000/bridge.com/api/v1/greet
+
+
+// Admin
+
+1.  /${DEV_BASEURL}/admin/POST/login
+
+2.  /${DEV_BASEURL}/admin/POST/create/new/calling-agent
+
+3.  /${DEV_BASEURL}/sponsor/requests/profile
+
+4.  /${DEV_BASEURL}/callingAgent/GET/sponsor/pending-profile-requests 
+
+5.  /${DEV_BASEURL}/callingAgent/GET/sponsors
+
+6.  /${DEV_BASEURL}/admin/PUT/accept/sponsor/profile/request
+
+7.  /${DEV_BASEURL}/admin/PUT/reject/sponsor/profile/request
+
+8.  /${DEV_BASEURL}/admin/GET/sponsor/profile-requests
+
+9.  /${DEV_BASEURL}/doctor/POST/login
+
+10. /${DEV_BASEURL}/sponsor/POST/login
+
+11. /${DEV_BASEURL}/callingAgent/POST/login
+
+12. /${DEV_BASEURL}/admin/GET/all-sponsors

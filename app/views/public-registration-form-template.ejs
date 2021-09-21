@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #243b55;
+    }
+
+    .login-box {
+      margin: 20px auto;
+      padding: 40px;
+      width: 90%;
+      background: rgba(0, 0, 0, .5);
+      box-sizing: border-box;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
+      border-radius: 10px;
+    }
+
+    .login-box h1 {
+      margin: 0 0 30px;
+      padding: 0;
+      color: #fff;
+      text-align: center;
+    }
+
+    .login-box .user-box {
+      position: relative;
+    }
+
+    .login-box .user-box input {
+      width: 100%;
+      padding: 10px 0;
+      margin: 10px 0px;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 50px;
+      border: none;
+      border-bottom: 1px solid #fff;
+      outline: none;
+      background: transparent;
+    }
+
+    .login-box .user-box label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 10px 0;
+      font-size: 16px;
+      color: #fff;
+      pointer-events: none;
+      transition: .5s;
+    }
+
+    .login-box .user-box input:focus~label,
+    .login-box .user-box input:valid~label {
+      top: -25px;
+      left: 0;
+      color: #03e9f4;
+      font-size: 12px;
+    }
+
+    .login-box .radio-box {
+      margin: 30px 0px;
+      margin-bottom: 50px;
+
+    }
+
+    .login-box .radio-box div {
+      display: flex;
+
+    }
+
+    .login-box .radio-box input {
+      font-size: 16px;
+      color: #fff;
+      border: none;
+      border-bottom: 1px solid #fff;
+      outline: none;
+      background: transparent;
+      transform: scale(1.4);
+
+    }
+
+    .login-box .radio-box label {
+      padding: 0px 0 3px 0px;
+      font-size: 16px;
+      color: rgb(255, 255, 255, 0.7);
+      pointer-events: none;
+      display: inline-block;
+    }
+
+
+    .login-box .radio-box p {
+      margin-bottom: 0px;
+      font-size: 16px;
+      color: #fff;
+      pointer-events: none;
+    }
+
+
+    .login-box form button {
+      position: relative;
+      display: inline-block;
+      padding: 10px 20px;
+      color: #03e9f4;
+      font-size: 16px;
+      text-decoration: none;
+      text-transform: uppercase;
+      overflow: hidden;
+      transition: .5s;
+      margin-top: 40px;
+      letter-spacing: 4px;
+      left: 50%;
+      transform: translate(-50%, 0%);
+    }
+
+    .login-box button:hover {
+      background: #03e9f4;
+      color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 0px #03e9f4,
+        0 0 5px #03e9f4,
+        0 0 10px #03e9f4,
+        0 0 15px #03e9f4;
+    }
+
+    .login-box button span {
+      position: absolute;
+      display: block;
+    }
+
+    .login-box button span:nth-child(1) {
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #03e9f4);
+      animation: btn-anim1 1s linear infinite;
+    }
+
+    @keyframes btn-anim1 {
+      0% {
+        left: -100%;
+      }
+
+      50%,
+      100% {
+        left: 100%;
+      }
+    }
+
+    .login-box button span:nth-child(2) {
+      top: -100%;
+      right: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, #03e9f4);
+      animation: btn-anim2 1s linear infinite;
+      animation-delay: .25s
+    }
+
+    @keyframes btn-anim2 {
+      0% {
+        top: -100%;
+      }
+
+      50%,
+      100% {
+        top: 100%;
+      }
+    }
+
+    .login-box button span:nth-child(3) {
+      bottom: 0;
+      right: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(270deg, transparent, #03e9f4);
+      animation: btn-anim3 1s linear infinite;
+      animation-delay: .5s
+    }
+
+    @keyframes btn-anim3 {
+      0% {
+        right: -100%;
+      }
+
+      50%,
+      100% {
+        right: 100%;
+      }
+    }
+
+    .login-box button span:nth-child(4) {
+      bottom: -100%;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(360deg, transparent, #03e9f4);
+      animation: btn-anim4 1s linear infinite;
+      animation-delay: .75s
+    }
+
+    @keyframes btn-anim4 {
+      0% {
+        bottom: -100%;
+      }
+
+      50%,
+      100% {
+        bottom: 100%;
+      }
+    }
+
+
+    .login-box #logo {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 50px;
+      border: 1px solid rgb(255, 255, 255, 0.1);
+      box-shadow: 0px 0px 10px rgb(255, 255, 255, 0.3);
+      padding: 15px;
+      border-radius: 20px;
+    }
+
+    .login-box #logo img {
+      border-radius: 100px;
+      width: 30px;
+      height: 30px;
+    }
+
+    .login-box #logo div {
+      display: inline-block;
+      color: white;
+      padding-left: 10px;
+    }
+
+    .login-box #logo div h6,
+    .login-box #logo div h3 {
+      padding: 2px;
+      margin: 0px;
+    }
+
+    .login-box #batchDetails {
+      margin: 40px 0px;
+      padding: 10px 0px 20px 0px;
+      /* text-align: center; */
+      border-top: 1px solid rgb(255, 255, 255, 0.3);
+      border-bottom: 1px solid rgb(255, 255, 255, 0.3);
+
+
+      border-radius: 10px;
+    }
+
+    .login-box #batchDetails h4 {
+      color: white;
+    }
+
+    .login-box #batchDetails p {
+      font-size: small;
+      color: white;
+      margin-top: 5px;
+      margin-bottom: 0px;
+    }
+
+    .login-box #batchDetails p span {
+      color: rgba(196, 193, 193, 0.774);
+    }
+
+    .login-box form {
+      margin: 50px 0px;
+    }
+
+    #req {
+      color: rgb(128, 11, 11);
+    }
+
+    @media only screen and (min-width: 770px) {
+      .login-box {
+        width: 50%;
+
+      }
+
+      .login-box #logo img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <div id="logo">
+
+      <div>
+        <h3>aKumoSolutions</h3>
+        <h6>Expanding Possibilities</h6>
+      </div>
+    </div>
+    <h1>Registration Form</h1>
+    <h4 style='text-align:center; color:white' id='title'>Registration for Course in Batch</h4>
+    <div id="batchDetails">
+      <h4> Batch Start Date and Schedule</h4>
+      <p>
+      <p>Start Date: <span id='startdate'>May 16th</span></p>
+      <p>End Date: <span id='enddate'>June 15th</span></p>
+      <!-- <p>Schedule:</p>
+          <p>Tuesday: <span>7pm - 9pm</span></p>
+          <p>Saturday: <span>2pm-5pm</span></p>
+          <p>Sunday : <span>2pm - 5pm</span></p>
+          <p>Duration: <span>12-15 sessions</span> </p> </p>         -->
+    </div>
+
+    <form id='member-registration-form'>
+      <div class="user-box">
+        <input type="text" name="FirstName " required id='member-fname' />
+        <label>First Name <span id="req">*</span> </label>
+      </div>
+      <div class="user-box">
+        <input type="text" name="LastName" required id='member-lname'>
+        <label>Last Name <span id="req">*</span></label>
+      </div>
+      <div class="radio-box">
+        <p>Gender <span id="req">*</span></p></br>
+        <div>
+          <input type="radio" id="male" name="gender" value="male" required>
+            <label for="male">Male</label>
+        </div>
+          <div>
+          <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label>
+        </div>
+         <div>
+          <input type="radio" id="preferNotToSay" name="gender" value="prefer not to say">
+            <label for="preferNotToSay">prefer not to say</label>
+        </div>
+
+      </div>
+
+      <div class="user-box">
+        <input type="text" name="phoneNumber" required id="member-phone">
+        <label>Phone Number <span id="req">*</span></label>
+      </div>
+      <div class="user-box">
+        <input type="text" name="email" required id="member-email">
+        <label>Email Address <span id="req">*</span></label>
+      </div>
+      <div class="user-box">
+        <input type="text" name="homeCity" required id="member-city">
+        <label>Home City <span id="req">*</span></label>
+      </div>
+      <div class="radio-box">
+        <p>You are <span id="req">*</span></p></br>
+        <div>
+          <input type="radio" id="ITprof" name="profession" value="IT Professional" required>
+            <label for="ITprof">IT Professional</label>
+        </div>
+          <div>
+          <input type="radio" id="nonITprof" name="profession" value="Non-IT Professional">
+            <label for="nonITprof">Non-IT Professional</label>
+        </div>
+         <div>
+          <input type="radio" id="student" name="profession" value="student">
+            <label for="student">Student</label>
+        </div>
+          <div>
+          <input type="radio" id="other" name="profession" value="other">
+            <label for="other">Other</label>
+        </div>
+
+      </div>
+      <div class="radio-box">
+        <p>How did you hear about us? <span id="req">*</span></p></br>
+        <div>
+          <input type="radio" id="socialMedia" name="hearAboutUs" value="socialMedia" required>
+            <label for="socialMedia">aKumoSolutions Social Media Platforms</label>
+        </div>
+         <div>
+          <input type="radio" id="Website" name="hearAboutUs" value="aKumoSolutions Website">
+            <label for="Website">aKumoSolutions Social Website</label>
+        </div>
+         <div>
+          <input type="radio" id="friends" name="hearAboutUs" value="Friends">
+            <label for="friends">Friends</label>
+        </div>
+          <div>
+          <input type="radio" id="other" name="hearAboutUs" value="other">
+            <label for="other">Other</label>
+        </div>
+
+      </div>
+      <div class="radio-box">
+        <p>Do you personally know any aKumoSolutions partners? <span id="req">*</span></p></br>
+        <div>
+          <input type="radio" id="yes" name="knowAnyAKumoSolutionsPartners" value="yes" required>
+            <label for="yes">Yes</label>
+        </div>
+          <div>
+          <input type="radio" id="No" name="knowAnyAKumoSolutionsPartners" value="No">
+            <label for="No">No</label>
+        </div>
+         
+      </div>
+      <div class="user-box">
+        <input type="text" name="partnerName" id="yes-relation">
+        <label>If answered "Yes", please provide the name of the partner</label>
+      </div>
+      <button style='background-color:transparent;' id='submit' type='submit'>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        Submit
+
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <!--jssssssssssssssssssssssss-->
+  </br>
+
+  <script>
+
+    window.onload = async () => {
+
+      const DEV_BASEURL = 'http://localhost:9000/api/v1';
+      const PROD_BASEURL = 'http://crm.dev.akumotechnology.com:9000/api/v1';
+
+      let batchid = '<%-id%>';
+      let title = document.getElementById('title');
+      console.log(title.innerHTML)
+      let startDate = document.getElementById('startdate');
+      let endDate = document.getElementById('enddate');
+
+      let registrationForm = document.getElementById("member-registration-form")
+      let btnSubmit = document.getElementById("submit")
+      let coursesFieldSet = document.getElementById("course-fieldset")
+      let coursesElement = document.getElementById("course")
+
+      let response = await fetch(`${PROD_BASEURL}/GET/all/serviceswithbatches?batchid=${batchid}`);
+      response = await response.json()
+
+      if (response.success) {
+        console.log('hhhhhhhh', response);
+        console.log(response.result)
+        if (response.result?.length) {
+          let str = `Registration for Course "${response.result[0].serviceName}" in "${response.result[0].batchName}"`
+          title.innerHTML = str;
+          let start = new Date(response.result[0].batchStartDate);
+          let smon = start.toLocaleString('default', { month: 'short' });
+          let sday = start.getDay();
+          startDate.innerHTML = `${smon} ${sday}`;
+
+          let end = new Date(response.result[0].batchEndDate);
+          let emon = end.toLocaleString('default', { month: 'short' });
+          let eday = end.getDay();
+          endDate.innerHTML = `${emon} ${eday}`;
+        }
+        else {
+        }
+      }
+
+      document.getElementById("member-registration-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let memberFName = document.getElementById("member-fname").value
+        let memberLName = document.getElementById("member-lname").value
+        let memberGender = document.querySelector('input[name="gender"]:checked').value;
+        let memberPhone = document.getElementById("member-phone").value
+        let memberEmail = document.getElementById("member-email").value
+        let memberCity = document.getElementById("member-city").value
+        let memberProf = document.querySelector('input[name="profession"]:checked').value;
+        let hearAboutUs = document.querySelector('input[name="hearAboutUs"]:checked').value;
+        let relation = document.querySelector('input[name="knowAnyAKumoSolutionsPartners"]:checked').value;
+        let yesRelation = document.getElementById("yes-relation").value
+        console.log(memberFName, memberLName, memberGender, memberPhone, memberEmail, memberCity, memberProf
+          , hearAboutUs, relation, yesRelation)
+        if (memberFName && memberLName && memberGender && memberPhone && memberEmail && memberCity && memberProf && hearAboutUs) {
+          fetch(`${PROD_BASEURL}/PATCH/enroll/new/member-with-course&batch`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              memberInfo: {
+                memberFName, memberLName, memberGender, memberPhone, memberEmail, memberCity, memberProf
+                , hearAboutUs, relation, yesRelation
+              },
+              serviceId: response.result[0].serviceId,
+              batchId: response.result[0].batchId
+            })
+          }).then(res => res.json().then(data => {
+            if (data?.success) {
+              document.write("<div style=' margin: 20px auto;padding: 40px;width: 90%; background-color: #243b55; box-sizing: border-box;box-shadow: 0 15px 25px rgba(0,0,0,.6);border-radius: 10px; color:white;'><h1>Thankyou</h1> <h4>We look forward to process your request</h4>  <h4>For additional questions or information, please contact us at: support@akumosolutions.io</h4> <h4>Best Regards,</h4> <h4>aKumoSolutions Team</h4></div>")
+
+              //   fetch(`${PROD_BASEURL}/GET/public/registration/submit`);
+
+            } if (!data?.success)
+
+              alert(`\n Something went wrong ${data.message}`)
+          }
+          )).catch(e => alert(e))
+        } else {
+          alert("please provide all required fields")
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>

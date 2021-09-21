@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Registration</title>
+  <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet">
+</head>
+
+<body>
+
+  <style>
+    *,
+    *:before,
+    *:after {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: #384047;
+    }
+
+    form {
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: #f4f7f8;
+      border-radius: 8px;
+    }
+
+    h1 {
+      margin: 0 0 30px 0;
+      text-align: center;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    input[type="datetime"],
+    input[type="email"],
+    input[type="number"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="time"],
+    input[type="url"],
+    textarea,
+    select {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      font-size: 16px;
+      height: auto;
+      margin: 0;
+      outline: 0;
+      padding: 15px;
+      width: 100%;
+      background-color: #e8eeef;
+      color: #8a97a0;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+      margin-bottom: 30px;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin: 0 4px 8px 0;
+    }
+
+    select {
+      padding: 6px;
+      height: 32px;
+      border-radius: 2px;
+    }
+
+    button {
+      padding: 19px 39px 18px 39px;
+      color: #FFF;
+      background-color: #4bc970;
+      font-size: 18px;
+      text-align: center;
+      font-style: normal;
+      border-radius: 5px;
+      width: 100%;
+      border: 1px solid #3ac162;
+      border-width: 1px 1px 3px;
+      box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+      margin-bottom: 10px;
+    }
+
+    fieldset {
+      margin-bottom: 30px;
+      border: none;
+    }
+
+    legend {
+      font-size: 1.4em;
+      margin-bottom: 10px;
+      font-weight: bold;
+      text-transform: uppercase
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      text-transform: uppercase
+    }
+
+    label.light {
+      font-weight: 300;
+      display: inline;
+    }
+
+    .number {
+      background-color: #5fcf80;
+      color: #fff;
+      height: 30px;
+      width: 30px;
+      display: inline-block;
+      font-size: 0.8em;
+      margin-right: 4px;
+      line-height: 30px;
+      text-align: center;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+      border-radius: 100%;
+    }
+
+    @media screen and (min-width: 480px) {
+
+      form {
+        max-width: 480px;
+      }
+
+    }
+  </style>
+
+  <form id="member-registration-form">
+
+    <h1>Member Batch Enrollemnt</h1>
+
+
+    <fieldset id="course-fieldset">
+      <!-- <legend><span class="number"></span>Registration in a Course</legend> -->
+      <label style="margin-top: 30px;">Select Your Prefered Batch In A Course</label>
+      <select id="course">
+      </select>
+    </fieldset>
+    <button id="submit" type="submit">Enroll</button>
+  </form>
+
+  <script>
+    window.onload = async () => {
+      const DEV_BASEURL= 'http://localhost:9000/api/v1';
+      const PROD_BASEURL= 'http://crm.dev.akumotechnology.com:9000/api/v1';
+      let registrationForm = document.getElementById("member-registration-form")
+      let btnSubmit = document.getElementById("submit")
+      let coursesFieldSet = document.getElementById("course-fieldset")
+      let coursesElement = document.getElementById("course")
+
+      let response = await fetch(`${PROD_BASEURL}/GET/all/serviceswithbatches`)
+      response = await response.json()
+      if (response.success) {
+          // console.log(response.coursesAndBatches)
+          if(response.coursesAndBatches?.length){
+            response.coursesAndBatches.forEach(cb => {
+          let optGroup = document.createElement("optgroup")
+          optGroup.label = cb.serviceName
+          
+          cb.batches.forEach(batch => {
+            let option = document.createElement("option")
+            option.value = JSON.stringify(`${cb.serviceId},${batch.batchId}`)
+            option.innerHTML = batch.batchName
+            optGroup.appendChild(option)  
+        })
+
+          
+          coursesElement.appendChild(optGroup)
+          coursesFieldSet.appendChild(coursesElement)
+          registrationForm.insertBefore(coursesFieldSet, btnSubmit)
+        })
+          }
+          else{
+            coursesFieldSet.style.display="none"
+            let p = document.createElement("p")
+            p.innerHTML = "Sorry no batches left for now to enroll"
+            registrationForm.insertBefore(p, coursesFieldSet) 
+          }
+     
+      }
+
+      coursesElement.addEventListener('change', (e) => {
+        console.log(e.target.value)
+      })
+
+      document.getElementById("member-registration-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let coursesElement = document.getElementById("course")
+
+        if (coursesElement.value !== '') {
+          fetch(`${PROD_BASEURL}/PATCH/enroll/member-in-course&batch`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: `<%=id%>`,
+              token: `<%=token%>`,
+              memberEmail: `<%=email%>`,
+              serviceId: JSON.parse(coursesElement.value).split(",")[0],
+              batchId: JSON.parse(coursesElement.value).split(",")[1]
+            })
+          }).then(res => res.json().then(data => {
+            if (data?.success)
+            document.writeln("Member Added To Batch Successfully")
+
+            if (!data?.success && data?.message === "link expired")
+              document.writeln("\n Link expired")
+
+            if (!data?.success && data?.message !== "link expired")
+              document.writeln("\n Something went wrong try again or create a new link")
+          }
+          )).catch(e => alert(e))
+        } else {
+          alert("please Select a batch to enroll in")
+        }
+      })
+    }
+  </script>
+
+</body>
+
+</html>
