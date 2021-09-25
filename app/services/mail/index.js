@@ -20,6 +20,10 @@ const {
   sponsorProfileCreationEmail
 } = require('./templates/profile-creation/sponsor-profile')
 
+const {
+  beneficiaryProfileCreationEmail
+} = require('./templates/profile-creation/beneficairy-profile')
+
 const mail = async (purpose, data) => {
 
   // create reusable transporter object using the default SMTP transport
@@ -88,6 +92,18 @@ const mail = async (purpose, data) => {
         })
 
       return sponsorProfileConfirmationEmailResult?.accepted?.length ? 'success' : 'failed'
+   
+      case 'profile-creation-beneficiary':
+      let beneficiaryProfileCreationEmailResult = await transporter
+        .sendMail({
+          from: creds().mailingCreds.user,
+          to: data.email,
+          subject: 'Profile Creation',
+          text: 'credentials allotment to use the mobile app',
+          html: beneficiaryProfileCreationEmail(data)
+        })
+
+      return beneficiaryProfileCreationEmailResult?.accepted?.length ? 'success' : 'failed'
 
     default:
       break

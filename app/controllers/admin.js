@@ -58,14 +58,32 @@ const getSponsorProfileRequestsPending = (req, res) => {
 
 const getAllSponsor = (req, res) => {
   sql.customQuery(
-    `SELECT sid, name, email, phone, CNIC, createdAt FROM sponsor`,
+    `SELECT sid, name, email, phone, CNIC, status, createdAt FROM sponsor`,
     (result, isError) => {
       if (!isError && result?.length) {
-        res.json({ success: true, sponsers: result })
-      } 
+        res.json({ success: true, sponsors: result })
+      }
       else if (!isError && !result?.length) {
         res.json({ success: false, message: 'No sponser registered yet' })
-      } 
+      }
+      else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+  return res
+}
+
+const getAllBeneficiaries = (req, res) => {
+  sql.customQuery(
+    `SELECT bid, name, email, phone, CNIC, age, gender, sid, status FROM beneficiary`,
+    (result, isError) => {
+      if (!isError && result?.length) {
+        res.json({ success: true, beneficiaries: result })
+      }
+      else if (!isError && !result?.length) {
+        res.json({ success: false, message: 'No beneficiaries registered yet' })
+      }
       else {
         res.json({ success: false, error: result })
       }
@@ -76,14 +94,14 @@ const getAllSponsor = (req, res) => {
 
 const getAllDoctor = (req, res) => {
   sql.customQuery(
-    `SELECT did, name, email, phone, gender, address, clinicName, speciality, pmdcNumber, availability, createdAt FROM doctor`,
+    `SELECT did, name, email, phone, gender, address, clinicName, speciality, pmdcNumber, availability, createdAt, status FROM doctor`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, doctors: result })
-      } 
+      }
       else if (!isError && !result?.length) {
         res.json({ success: false, message: 'No sponser registered yet' })
-      } 
+      }
       else {
         res.json({ success: false, error: result })
       }
@@ -94,19 +112,164 @@ const getAllDoctor = (req, res) => {
 
 const getAllCallingAgent = (req, res) => {
   sql.customQuery(
-    `SELECT caid, name, email, phone, gender, CNIC, salary, qualification, shiftTiming, createdAt FROM calling_agent`,
+    `SELECT caid, name, email, phone, gender, CNIC, salary, qualification, shiftTiming, createdAt, status FROM calling_agent`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, callingAgents: result })
-      } 
+      }
       else if (!isError && !result?.length) {
         res.json({ success: false, message: 'No sponser registered yet' })
-      } 
+      }
       else {
         res.json({ success: false, error: result })
       }
     }
   )
+  return res
+}
+
+
+const terminateSponsor = (req, res) => {
+
+  const { sid } = req.params
+
+  sql.customQuery(
+    `UPDATE sponsor
+     SET status = 'TERMINATED'
+     WHERE sid = '${sid}'`,
+    (result, isError) => {
+      if (!isError) {
+        console.log("sponser updated")
+        sql.customQuery(
+          `UPDATE beneficiary
+           SET status = 'TERMINATED'
+           WHERE sid = '${sid}'`, (benResult, benError) => {
+          if (!benError) {
+            console.log("beneficiary updated")
+            res.json({ success: true, message: "Sponsor and it's beneficiaries has been terminated" })
+          }
+          else {
+            res.json({ success: false, error: result })
+          }
+        })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+
+  return res
+}
+
+const terminateDoctor = (req, res) => {
+
+  const { did } = req.params
+
+  sql.customQuery(
+    `UPDATE doctor
+    SET status = 'TERMINATED'
+    WHERE did = '${did}'`,
+    (result, isError) => {
+      if (!isError) {
+        res.json({ success: true, message: result })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+
+  return res
+}
+
+const terminateCallingAgent = (req, res) => {
+
+  const { caid } = req.params
+  
+  sql.customQuery(
+    `UPDATE calling_agent 
+    SET status = "TERMINATED" 
+    WHERE caid = '${caid}'`,
+    (result, isError) => {
+      if (!isError) {
+        res.json({ success: true, message: result })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+
+  return res
+}
+
+const activateSponsor = (req, res) => {
+
+  const { sid } = req.params
+
+  sql.customQuery(
+    `UPDATE sponsor
+     SET status = 'ACTIVE'
+     WHERE sid = '${sid}'`,
+    (result, isError) => {
+      if (!isError) {
+        console.log("sponser updated")
+        sql.customQuery(
+          `UPDATE beneficiary
+           SET status = 'TERMINATED'
+           WHERE sid = '${sid}'`, (benResult, benError) => {
+          if (!benError) {
+            console.log("beneficiary updated")
+            res.json({ success: true, message: "Sponsor and it's beneficiaries has been terminated" })
+          }
+          else {
+            res.json({ success: false, error: result })
+          }
+        })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+
+  return res
+}
+
+const activateDoctor = (req, res) => {
+
+  const { did } = req.params
+
+  sql.customQuery(
+    `UPDATE doctor
+    SET status = 'ACTIVE'
+    WHERE did = '${did}'`,
+    (result, isError) => {
+      if (!isError) {
+        res.json({ success: true, message: result })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+
+  return res
+}
+
+const activateCallingAgent = (req, res) => {
+
+  const { caid } = req.params
+
+  sql.customQuery(
+    `UPDATE calling_agent 
+    SET status = "ACTIVE" 
+    WHERE caid = '${caid}'`,
+    (result, isError) => {
+      if (!isError) {
+        res.json({ success: true, message: result })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+
   return res
 }
 
@@ -145,6 +308,7 @@ const acceptSponsorProfileRequest = (req, res) => {
             )
           }
         })
+          .catch(err => console.log(err))
       } else {
         res.json({ success: false, error: result })
       }
@@ -152,7 +316,7 @@ const acceptSponsorProfileRequest = (req, res) => {
   return res
 }
 
-const rejectSponsorProfileRequest = (req, res) => {  
+const rejectSponsorProfileRequest = (req, res) => {
   const { email } = req.body
 
   sql.customQuery(
@@ -258,7 +422,6 @@ const createDoctorProfile = (req, res) => {
   return res
 }
 
-
 module.exports = {
   loginAdmin,
   getSponsorProfileRequestsPending,
@@ -268,7 +431,14 @@ module.exports = {
   createCallingAgentProfile,
   getAllSponsor,
   getAllDoctor,
-  getAllCallingAgent
+  getAllCallingAgent,
+  terminateSponsor,
+  terminateDoctor,
+  terminateCallingAgent,
+  getAllBeneficiaries,
+  activateCallingAgent,
+  activateDoctor,
+  activateSponsor
 }
 
 // Calling Agent

@@ -1,9 +1,9 @@
-function creds () {
+function creds() {
   const allCreds = {
     DEV_dbCreds: {
       host: 'localhost',
       database: 'bridge',
-      user:'root',
+      user: 'root',
     },
 
     PROD_dbCreds: {
@@ -14,16 +14,22 @@ function creds () {
       debug: false
     },
 
-    mailingCreds:{
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+    mailingCreds: {
+      service: 'Gmail',
+      port: 25,
+      secure: false,
       auth: {
+        user:'nabeelelahi2000@gmail.com',
+        pass:'html5css3js'
         // user:'silvertechsolutions19@gmail.com',
         // pass:'Power123!!'
-        user:'samibirdge@gmail.com',
-        pass:'Arsenalis6star'
-      }
+        // user: 'ba@silvertechsolutions.net',
+        // pass: 'JHwPMLyKVzOZ'
+      },
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+      },
     }
   }
   return allCreds
