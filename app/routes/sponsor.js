@@ -14,6 +14,6 @@ router.post(`/${DEV_BASEURL}/sponsor/POST/login`, sponsorLogin)
 
 router.post(`/${DEV_BASEURL}/sponsor/POST/register-beneficiary/:sid`, registerBeneficiary)
 
-router.get(`/${DEV_BASEURL}/sponsor/GET/beneficiaries/:sid`, getAllBeneficiaries)
+router.get(`/${DEV_BASEURL}/sponsor/GET/beneficiaries/:sid`, getAllBeneficiaries) 
 
 module.exports = router

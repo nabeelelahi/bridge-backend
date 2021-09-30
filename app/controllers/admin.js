@@ -214,11 +214,11 @@ const activateSponsor = (req, res) => {
         console.log("sponser updated")
         sql.customQuery(
           `UPDATE beneficiary
-           SET status = 'TERMINATED'
+           SET status = 'ACTIVE'
            WHERE sid = '${sid}'`, (benResult, benError) => {
           if (!benError) {
             console.log("beneficiary updated")
-            res.json({ success: true, message: "Sponsor and it's beneficiaries has been terminated" })
+            res.json({ success: true, message: "Sponsor and it's beneficiaries has been activated" })
           }
           else {
             res.json({ success: false, error: result })
