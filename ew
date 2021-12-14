@@ -1,0 +1,293 @@
+const generateResetAdminPasswordLink = (req, res) => {
+  const { email } = req.body
+
+  sql.customQuery(
+    `SELECT * FROM admin
+     WHERE email = '${email}'`,
+    (result1, isError) => {
+
+      if (isError) {
+        res.json({
+          success: false,
+          message: result1
+        })
+      }
+
+      if (!isError && result1.length === 0) {
+        res.json({
+          success: false,
+          message: 'this email does not exist'
+        })
+      }
+
+      if (result1.length > 0) {
+        sql.customQuery(`SELECT * FROM token WHERE adminId = '${result1[0].adminId}'`, async (result2, isError) => {
+
+          if (isError) {
+            res.json({
+              success: false,
+              message: result2
+            })
+          }
+
+          if (!isError && result2.length > 0) {
+            sql.customQuery(`DELETE FROM token WHERE 
+            adminId = '${result1[0].adminId}' AND isActive = 'TRUE'`, async (result3, isError) => {
+
+              if (isError) {
+                res.json({
+                  success: false,
+                  message: result3
+                })
+              }
+
+              else {
+                const bcryptSalt = 10;
+                let resetToken = crypto.randomBytes(32).toString("hex");
+                const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
+
+                sql.customQuery(`INSERT INTO token (token, adminId, isActive, createdAt)
+                
+                VALUES ('${hash}', '${result1[0].adminId}', 'TRUE', '${new Date()}');`, (result4, isError) => {
+
+                  if (isError) {
+                    res.json({
+                      success: false,
+                      message: result4
+                    })
+                  }
+
+                  else {
+                    const link = `${PROD_BASEURL}/GET/admin/account/password/reset?token=${resetToken}&id=${result1[0].adminId}`;
+
+                    mail("resetPasswordLink", { email, link }).then((oola) => {
+                      console.log(oola, "OOLAAA@1")
+                      res.json({
+                        success: true,
+                        message: `email has been sent to ${email}`
+                      })
+                    })
+
+
+                  }
+                })
+              }
+            })
+          }
+
+          if (!isError && result2.length === 0) {
+            const bcryptSalt = 10;
+            let resetToken = crypto.randomBytes(32).toString("hex");
+            const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
+
+            sql.customQuery(`INSERT INTO token (token, adminId, isActive, createdAt)
+            
+            VALUES ('${hash}', '${result1[0].adminId}', 'TRUE', '${new Date()}');`, (result3, isError) => {
+
+              if (isError) {
+                res.json({
+                  success: false,
+                  message: result3
+                })
+              }
+
+              else {
+                const link = `${PROD_BASEURL}/GET/admin/account/password/reset?token=${resetToken}&id=${result1[0].adminId}`;
+                mail("resetPasswordLink", { email, link }).then((oola) => {
+                  console.log(oola, "OOLAAA@2")
+                  res.json({
+                    success: true,
+                    message: `email has been sent to ${email}`
+                  })
+                })
+              }
+            })
+          }
+        })
+      }
+    }
+  )
+  return res
+}
+
+const renderResetPasswordAdminView = (req, res) => {
+  const { token, id } = req.query
+  return res.render('reset-password-template', { token, id })
+}
+
+const resetPasswordAdmin = (req, res) => {
+  const { token, id, newPassword } = req.body
+
+  sql.customQuery(`SELECT * FROM token WHERE adminId = '${id}'`, (result, isError) => {
+    if (isError) {
+      res.json({
+        success: false,
+        message: result
+      })
+    } else {
+
+
+      currentTime = new Date();
+      let timeDiff = currentTime - new Date(result[0].createdAt); //in ms
+      timeDiff /= 1000;
+
+      // get seconds 
+      let seconds = Math.round(timeDiff);
+
+      if (seconds > 30) {
+        res.json({
+          success: false,
+          message: 'link expired'
+        })
+      } else {
+        sql.customQuery(
+          `UPDATE admin
+      SET password = '${newPassword}'
+      WHERE adminId = '${id}'`,
+          (result, isError) => {
+            if (isError) {
+              res.json({
+                success: false,
+                message: result
+              })
+            } else {
+              res.json({
+                success: true,
+                message: 'password reset successfully'
+              })
+            }
+          }
+        )
+      }
+    }
+  })
+  return res
+}
+
+const generateMemberRegistrationFormLink = (req, res) => {
+  const { adminId, email } = req.params
+  try {
+    sql.customQuery(`SELECT * FROM member WHERE memberEmail = '${email}'`, async (result, isError) => {
+
+      if (isError) {
+        res.json({
+          success: false,
+          message: result
+        })
+      } else {
+        if (result?.length) {
+          sql.customQuery(`SELECT * FROM admin WHERE adminId = '${adminId}'`, async (result0, isError) => {
+
+            if (isError) {
+              res.json({
+                success: false,
+                message: result0
+              })
+            } else {
+              if (result0?.length) {
+                sql.customQuery(`SELECT * FROM registration_links WHERE adminId = '${adminId}' AND email = '${email}' AND isActive = 'TRUE'`, async (result1, isError) => {
+
+                  if (isError) {
+                    res.json({
+                      success: false,
+                      message: result1
+                    })
+                  } else {
+                    sql.customQuery(`UPDATE registration_links SET isActive = 'FALSE' WHERE 
+                      adminId = '${adminId}' AND email = '${email}' AND isActive = 'TRUE'`, async (result2, isError) => {
+
+                      if (isError) {
+                        res.json({
+                          success: false,
+                          message: result2
+                        })
+                      } else {
+                        const bcryptSalt = 10;
+                        let registrationFormToken = crypto.randomBytes(32).toString("hex");
+                        // const hash = await bcrypt.hash(registrationFormToken, Number(bcryptSalt));
+                        const formLink = `${PROD_BASEURL}/GET/member/registration/form?token=${registrationFormToken}&id=${adminId}&email=${email}`;
+
+                        sql.customQuery(`INSERT INTO registration_links (adminId, email, formLink, token, isActive, createdAt)
+                        
+                        VALUES ('${adminId}', '${email}', '${formLink}', '${registrationFormToken}', 'TRUE', '${new Date()}')`, (result3, isError) => {
+
+                          if (isError) {
+                            res.json({
+                              success: false,
+                              message: result3
+                            })
+                          }
+                          else {
+                            mail("registrationFormLink", { email, formLink }).then((isEmailSent) => {
+                              console.log(isEmailSent, "Email Sent Response")
+                              res.json({
+                                success: true,
+                                message: `email has been sent to ${email}`
+                              })
+                            })
+                          }
+                        })
+                      }
+                    })
+                  }
+                })
+
+              } else {
+                res.json({
+                  success: false,
+                  message: "no such admin"
+                })
+              }
+            }
+          })
+        } else {
+          res.json({
+            success: false,
+            message: "member email doesnot exist"
+          })
+        }
+      }
+    })
+  } catch (error) {
+    res.json({ success: false, message: error })
+  }
+
+  return res
+}
+
+const renderMemberRegistrationFormView = (req, res) => {
+  const { token, id, email } = req.query
+
+  sql.customQuery(`SELECT * FROM registration_links WHERE adminId = '${id}' AND token = '${token}' AND isActive = 'TRUE'`, async (result, isError) => {
+    if (isError) {
+      res.json({
+        success: false,
+        message: result
+      })
+    } else {
+
+      if (result?.length) {
+        currentTime = new Date();
+        let timeDiff = currentTime - new Date(result[0]?.createdAt); //in ms
+        timeDiff /= 1000;
+
+        // get seconds 
+        let seconds = Math.round(timeDiff);
+
+        if (seconds > 3600) {
+          res.json({
+            success: false,
+            message: 'link expired'
+          })
+        } else {
+          return res.render('member-registration-form-template', { token, id, email })
+        }
+      } else {
+        res.json({
+          success: false,
+          message: 'link not valid'
+        })
+      }
+    }
+  })
+}

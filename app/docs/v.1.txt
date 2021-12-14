@@ -1,0 +1,59 @@
+CONSTANTS
+---------
+PROTOCOL = http://
+IP/DOMAIN =  192.168.0.127 
+PORT = 9000
+DEV_BASEURL = bridge.com/api/v1
+
+
+SAMPLE URL FOR TESTING IF BACKEND IS RESPONDING OR NOT
+------------------------------------------------------
+
+http://192.168.0.127:9000/bridge.com/api/v1/greet
+
+
+// Admin
+
+1.  /${DEV_BASEURL}/admin/POST/login
+
+2.  /${DEV_BASEURL}/admin/POST/create/new/calling-agent
+
+3.  /${DEV_BASEURL}/admin/PUT/accept/sponsor/profile/request
+
+4.  /${DEV_BASEURL}/admin/PUT/reject/sponsor/profile/request
+
+5.  /${DEV_BASEURL}/admin/GET/sponsor/profile-requests
+
+6. /${DEV_BASEURL}/admin/GET/all-sponsors
+
+7. /${DEV_BASEURL}/admin/GET/all-doctors
+
+8. /${DEV_BASEURL}/admin/GET/all-callingAgents
+
+9. /${DEV_BASEURL}/admin/PUT/terminate-sponsor/:sid
+
+10. /${DEV_BASEURL}/admin/PUT/terminate-doctor/:did
+
+11. /${DEV_BASEURL}/admin/PUT/terminate-calling-agent/:caid
+
+// Sponser
+
+1.  /${DEV_BASEURL}/sponsor/requests/profile
+
+2. /${DEV_BASEURL}/sponsor/POST/login
+
+3. /${DEV_BASEURL}/sponsor/POST/register-beneficiary
+
+4. /${DEV_BASEURL}/sponsor/GET/beneficiaries/:sid
+
+// Doctor
+
+1.  /${DEV_BASEURL}/doctor/POST/login
+
+// Calling Agent
+
+1. /${DEV_BASEURL}/callingAgent/POST/login
+
+2. /${DEV_BASEURL}/callingAgent/GET/sponsor/pending-profile-requests 
+
+3.  /${DEV_BASEURL}/callingAgent/GET/sponsors
