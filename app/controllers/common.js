@@ -17,6 +17,34 @@ const services = (req, res) => {
   return res;
 };
 
+const servicesByType = (req, res) => {
+  let getAllServicesQuery = `SELECT * FROM service WHERE type = '${req.params.type}'`;
+  sql.customQuery(getAllServicesQuery, (result, isError) => {
+    if (!isError && result?.length) {
+      res.json({ success: true, data: result });
+    } else if (!isError && !result?.length) {
+      res.json({ success: false, message: "no services" });
+    } else {
+      res.json({ success: false, error: result });
+    }
+  });
+  return res;
+};
+
+const servicesByCategory = (req, res) => {
+  let getAllServicesQuery = `SELECT * FROM service WHERE category_type = '${req.params.category}' AND type = '${req.params.type}'`;
+  sql.customQuery(getAllServicesQuery, (result, isError) => {
+    if (!isError && result?.length) {
+      res.json({ success: true, data: result });
+    } else if (!isError && !result?.length) {
+      res.json({ success: false, message: "no services" });
+    } else {
+      res.json({ success: false, error: result });
+    }
+  });
+  return res;
+};
+
 const buyService = (req, res) => {
   // const buyFakeService = [
   //   {
@@ -68,7 +96,6 @@ const requestAppointment = (req, res) => {
   res.json({ success: true, data: fakeServices });
   return res;
 };
-
 // emr
 const emr = (req, res) => {
   const buyFakeService = [
@@ -100,4 +127,6 @@ module.exports = {
   buyService,
   requestAppointment,
   emr,
+  servicesByCategory,
+  servicesByType
 };

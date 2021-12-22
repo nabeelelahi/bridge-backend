@@ -9,7 +9,7 @@ router.post(
   requestForProfile
 );
 
-router.post(`/${DEV_BASEURL}/sponsor/POST/login`, login);
+router.post(`/${DEV_BASEURL}/sponsor/POST/login/`, login);
 
 router.get(`/${DEV_BASEURL}/sponsor/GET/beneficiaries/:sponserId`, beneficiaries);
 

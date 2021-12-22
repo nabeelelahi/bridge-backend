@@ -65,7 +65,8 @@ const requestForProfile = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
+  console.log(email);
+  console.log(password);
   sql.customQuery(
     `SELECT id, name, email, phone, CNIC, status 
          FROM 
