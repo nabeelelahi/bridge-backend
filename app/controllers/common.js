@@ -3,6 +3,8 @@ const { sql } = require("../config/db");
 const uid = require("../helpers/uid");
 const pw = require("../helpers/pw");
 
+// view service
+
 const services = (req, res) => {
   let getAllServicesQuery = `SELECT * FROM service`;
   sql.customQuery(getAllServicesQuery, (result, isError) => {
@@ -45,88 +47,246 @@ const servicesByCategory = (req, res) => {
   return res;
 };
 
-const buyService = (req, res) => {
-  // const buyFakeService = [
-  //   {
-  //     id: 1,
-  //     name: "Care giver home visit",
-  //     price: 3000,
-  //     discount: 15,
-  //   },
-  // ];
-  // res.json({ success: true, data: fakeServices });
-
-  let buyServicesQuery = `SELECT * FROM service`;
-  sql.customQuery(buyServicesQuery, (result, isError) => {
-    if (!isError && result?.length) {
-      res.json({ success: true, data: result[0] });
-    } else if (!isError && !result?.length) {
-      res.json({
-        success: false,
-        message: "no identity corresponds to these credentials",
-      });
-    } else {
-      res.json({ success: false, error: result });
-    }
-  });
-  return res;
-};
+// request services
 
 const requestAppointment = (req, res) => {
-  const buyFakeService = [
-    {
-      id: 1,
-      name: "Care giver home visit",
-      price: 3000,
-      discount: 15,
-    },
-  ];
-  // sql.customQuery(
-  //     ``,
-  //     (result, isError) => {
-  //         if (!isError && result?.length) {
-  //             res.json({ success: true, data: result[0] })
-  //         } else if (!isError && !result?.length) {
-  //             res.json({ success: false, message: 'no identity corresponds to these credentials' })
-  //         } else {
-  //             res.json({ success: false, error: result })
-  //         }
-  //     }
-  // )
-  res.json({ success: true, data: fakeServices });
+
+  const {
+    buyerId,
+    buyerType,
+    serviceId,
+    doctorId,
+    serviceName,
+    amount,
+    discount,
+    price,
+    discription,
+    date,
+    time,
+    createdAt,
+  } = req.body;
+
+  const status = 'PENDING';
+
+  const query = `INSERT INTO purchased_appointments 
+  (
+    buyer_id,	
+    service_id,	
+    doctor_id,	
+    service_name,	
+    amount,	
+    discount,	
+    price,	
+    discripton,	
+    date,	
+    time,	
+    created_at,	
+    status,	
+    buyer_type
+    )
+     VALUES (
+       '${buyerId}', 
+       '${serviceId}', 
+       '${doctorId}', 
+       '${serviceName}', 
+       '${amount}',  
+       '${discount}',  
+       '${price}',  
+       '${discription}',  
+       '${date}',  
+       '${time}',  
+       '${createdAt}',  
+       '${status}', 
+       '${buyerType}'  
+       )              
+     `
+
+  sql.customQuery(
+    query,
+    (result, isError) => {
+      if (!isError) {
+        res.json({
+          success: true,
+          message: "Your appointment has been requested",
+        });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+
   return res;
 };
+
+const requestMedicine = (req, res) => {
+
+  const {
+    buyerId,
+    buyerType,
+    serviceId,
+    serviceName,
+    amount,
+    discount,
+    price,
+    discription,
+    createdAt,
+  } = req.body;
+
+  const status = 'PENDING';
+
+  const query = `INSERT INTO purchased_medicines 
+  (
+    buyer_id,	
+    service_id,	
+    doctor_id,	
+    service_name,	
+    amount,	
+    price,	
+    discription,	
+    created_at,	
+    status,	
+    buyer_type
+    )
+     VALUES 
+     (
+       '${buyerId}', 
+       '${serviceId}', 
+       '${serviceName}', 
+       '${amount}',  
+       '${discount}',  
+       '${price}',  
+       '${discription}',
+       '${createdAt}',  
+       '${status}', 
+       '${buyerType}'  
+       )              
+     `
+
+  sql.customQuery(
+    query,
+    (result, isError) => {
+      if (!isError) {
+        res.json({
+          success: true,
+          message: "Your order has been requested",
+        });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+
+  return res
+
+};
+
+const requestLabTest = (req, res) => {
+
+  const {
+    buyerId,
+    buyerType,
+    serviceId,
+    serviceName,
+    amount,
+    discount,
+    price,
+    discription,
+    date,
+    time,
+    createdAt,
+  } = req.body;
+
+  const status = 'PENDING';
+
+  const query = `INSERT INTO purchased_labtests
+  (
+    buyer_id,	
+    service_id,		
+    service_name,	
+    amount,	
+    discount,	
+    price,	
+    discription,	
+    date,	
+    time,	
+    created_at,	
+    status,	
+    buyer_type
+    )
+     VALUES (
+       '${buyerId}', 
+       '${serviceId}', 
+       '${serviceName}', 
+       '${amount}',  
+       '${discount}',  
+       '${price}',  
+       '${discription}',  
+       '${date}',  
+       '${time}',  
+       '${createdAt}',  
+       '${status}', 
+       '${buyerType}'  
+       )              
+     `
+
+  sql.customQuery(
+    query,
+    (result, isError) => {
+      if (!isError) {
+        res.json({
+          success: true,
+          message: "Your labtest has been requested",
+        });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+
+  return res
+
+};
+
 // emr
-const emr = (req, res) => {
-  const buyFakeService = [
-    {
-      id: 1,
-      name: "Care giver home visit",
-      price: 3000,
-      discount: 15,
-    },
-  ];
-  // sql.customQuery(
-  //     ``,
-  //     (result, isError) => {
-  //         if (!isError && result?.length) {
-  //             res.json({ success: true, data: result[0] })
-  //         } else if (!isError && !result?.length) {
-  //             res.json({ success: false, message: 'no identity corresponds to these credentials' })
-  //         } else {
-  //             res.json({ success: false, error: result })
-  //         }
-  //     }
-  // )
-  res.json({ success: true, data: fakeServices });
+
+const getPreviousOrders = (req, res) => {
+
+  const { id, categoryType, buyerType } = req.params;
+
+  let category;
+
+  if(categoryType === "appointment") category = "purchased_appointments" 
+    
+  if(categoryType === "medicine") category = "purchased_medicines" 
+  
+  if(categoryType === "labtest") category = "purchased_labtests" 
+
+  const query = `SELECT * FROM ${category} WHERE buyer_id = '${id}' AND buyer_type = '${buyerType}'`;
+
+  sql.customQuery(
+    query,
+    (result, isError) => {
+
+      if (!isError && result?.length) {
+        res.json({ success: true, data: result });
+      }
+      else if (!isError && !result?.length) {
+        res.json({ success: true, data: [], message: "You have not purcased any labtest yet.." });
+      }
+      else {
+        res.json({ success: false, error: result });
+      }
+    });
   return res;
 };
+
 
 module.exports = {
   services,
-  buyService,
-  requestAppointment,
-  emr,
   servicesByCategory,
-  servicesByType
+  servicesByType,
+  requestAppointment,
+  requestMedicine,
+  requestLabTest,
+  getPreviousOrders
 };

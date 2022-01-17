@@ -3,12 +3,17 @@ const { DEV_BASEURL, PROD_BASEURL } = require('../config/constants')
 
 const {
     callingAgentLogin,
-    getSponsorProfileRequests,
-    getSponsors
+    getSponsors,
+    getOrderRequests,
+    approveOrderRequest,
 } = require('../controllers').callingAgent
 
 router.post(`/${DEV_BASEURL}/callingAgent/POST/login`, callingAgentLogin)
-router.get(`/${DEV_BASEURL}/callingAgent/GET/sponsor/pending-profile-requests`, getSponsorProfileRequests)
+
 router.get(`/${DEV_BASEURL}/callingAgent/GET/sponsors`, getSponsors)
+
+router.get(`/${DEV_BASEURL}/callingAgent/GET/order-requests/:categoryType`, getOrderRequests)
+
+router.patch(`/${DEV_BASEURL}/callingAgent/PATCH/approve-order/:id/:categoryType`, approveOrderRequest)
 
 module.exports = router;
