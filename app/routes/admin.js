@@ -17,7 +17,8 @@ const {
   getAllBeneficiaries,
   activateCallingAgent,
   activateDoctor,
-  activateSponsor
+  activateSponsor,
+  getOrders
 } = require('../controllers').admin
 
 router.get(`/${DEV_BASEURL}/admin/GET/all-sponsors`, getAllSponsor)
@@ -51,6 +52,8 @@ router.put(`/${DEV_BASEURL}/admin/PUT/activate-sponsor/:sid`, activateSponsor)
 router.put(`/${DEV_BASEURL}/admin/PUT/activate-doctor/:did`, activateDoctor)
 
 router.put(`/${DEV_BASEURL}/admin/PUT/activate-calling-agent/:caid`, activateCallingAgent)
+
+router.get(`/${DEV_BASEURL}/admin/GET/get-orders/:categoryType`, getOrders)
 
 // router.post(`/${BASE_URL}/POST/admin/account/password/reset/link`, generateResetAdminPasswordLink)
 

@@ -275,7 +275,7 @@ const activateCallingAgent = (req, res) => {
 };
 
 const acceptSponsorProfileRequest = (req, res) => {
-  const { email } = req.body;
+  const { email, doctorId } = req.body;
   sql.customQuery(
     `SELECT id, name, email, phone, cnic, status FROM sponsor WHERE email = '${email}' AND status = 'PENDING_ADMIN_APPROVAL'`,
     (result, isError) => {
@@ -287,7 +287,7 @@ const acceptSponsorProfileRequest = (req, res) => {
             console.log(result, "Email Sent Response");
             if (isEmailSent === 'success') {
               sql.customQuery(
-                `UPDATE sponsor SET status = 'APPROVED', password = '${password}' WHERE id = '${result[0].id}'`,
+                `UPDATE sponsor SET status = 'APPROVED', password = '${password}', assigned_doctorId = '${doctorId}' WHERE id = '${result[0].id}'`,
                 (result, isError) => {
                   if (!isError) {
                     // sql.customQuery(
@@ -460,6 +460,33 @@ const createDoctorProfile = (req, res) => {
   return res;
 };
 
+const getOrders = (req, res) => {
+
+  const { categoryType } = req.params
+
+  let category;
+
+  if (categoryType === "appointment") category = "purchased_appointments"
+
+  if (categoryType === "medicine") category = "purchased_medicines"
+
+  if (categoryType === "labtest") category = "purchased_labtests"
+
+  sql.customQuery(
+      `SELECT * FROM ${category}  WHERE status = 'APPROVED'`,
+      (result, isError) => {
+          if (!isError && result?.length) {
+              res.json({ success: true, requests: result })
+          } else if (!isError && !result?.length) {
+              res.json({ success: false, message: "no requests found" })
+          } else {
+              res.json({ success: false, error: result })
+          }
+      }
+  )
+  return res
+}
+
 module.exports = {
   loginAdmin,
   getSponsorProfileRequestsPending,
@@ -477,6 +504,7 @@ module.exports = {
   activateCallingAgent,
   activateDoctor,
   activateSponsor,
+  getOrders
 };
 
 // Calling Agent

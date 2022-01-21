@@ -8,7 +8,8 @@ const {
     requestAppointment,
     requestMedicine,
     requestLabTest,
-    getPreviousOrders
+    getPreviousOrders,
+    getHER 
 } = require('../controllers').common
 
 router.get(`/${DEV_BASEURL}/common/GET/services`, services)
@@ -24,5 +25,7 @@ router.post(`/${DEV_BASEURL}/common/POST/request-medicine`, requestMedicine)
 router.post(`/${DEV_BASEURL}/common/POST/request-labtest`, requestLabTest)
 
 router.get(`/${DEV_BASEURL}/common/GET/previous-orders/:id/:buyerType/:categoryType`, getPreviousOrders)
+
+router.get(`/${DEV_BASEURL}/common/GET/her/:id`, getHER)
 
 module.exports = router

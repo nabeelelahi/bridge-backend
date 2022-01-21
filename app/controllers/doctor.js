@@ -150,10 +150,127 @@ const appointmentDetails = (req, res) => {
   return res;
 };
 
+const getPatients = async (req, res) => {
+
+  const { id, userType } = req.params;
+
+  sql.customQuery(
+    `SELECT * FROM ${userType} WHERE assigned_doctorId = '${id}'`,
+    (result, isError) => {
+      if (!isError && result?.length) {
+        res.json({ success: true, beneficiaries: result });
+      } else if (!isError && !result?.length) {
+        res.json({
+          success: false,
+          message: "You have not been assigned yet",
+        });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+
+  return res;
+};
+
+const updateHER = (req, res) => {
+
+  const {
+    previourHER,
+    patientId,
+    sugar,
+    bloodPressure,
+    ear,
+    eye,
+    hRate,
+    height,
+    skin,
+    tempreture,
+    weight,
+  } = req.body
+
+  if(previourHER){
+    
+    const query = `INSERT INTO her 
+  (
+    patientId,
+    sugar,
+    bloodPressure,
+    ear,
+    eye,
+    hRate,
+    height,
+    skin,
+    tempreture,
+    weight
+    )
+     VALUES ( 
+       '${patientId}', 
+       '${sugar}', 
+       '${bloodPressure}', 
+       '${ear}',  
+       '${eye}',  
+       '${hRate}',  
+       '${height}',  
+       '${skin}',  
+       '${tempreture}',  
+       '${weight}'
+       )              
+     `
+
+     sql.customQuery(
+      query,
+      (result, isError) => {
+        if (!isError) {
+          res.json({
+            success: true,
+            message: "HER has been updated successfully",
+          });
+        } else {
+          res.json({ success: false, error: result });
+        }
+      }
+    );
+
+  }
+  else{
+
+    const query = `UPDATE her SET 
+    sugar = ${sugar},
+    bloodPressure = ${bloodPressure},
+    ear = ${ear},
+    eye = ${eye},
+    hRate = ${hRate},
+    height = ${height},
+    skin = ${skin},
+    tempreture ${tempreture},
+    weight ${weight}, 
+    WHERE patientId = '${patientId}'`
+
+    sql.customQuery(
+      query,
+      (result, isError) => {
+          if (!isError) {
+              res.json({ success: true, message: 'HER has been updated successfully' })
+          }
+          else {
+              res.json({ success: false, error: isError })
+          }
+      }
+  )
+
+  }
+
+  return res;
+
+}
+
 module.exports = {
   login,
   patients,
   appointments,
   upcomingAppointments,
-  appointmentDetails
+  appointmentDetails,
+  getPatients,
+  updateHER
 };
