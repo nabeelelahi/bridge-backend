@@ -7,17 +7,7 @@ const login = (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
   sql.customQuery(
-    `SELECT 
-         did, name, email, 
-         phone, gender, address, 
-         clinicName, speciality, 
-         pmdcNumber, availability, 
-         createdAt, status 
-         FROM 
-         doctor 
-         WHERE email = '${email}' 
-         AND 
-         password = '${password}'`,
+    `SELECT * FROM doctor WHERE email = '${email}' AND  password = '${password}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, data: result[0] });
@@ -58,27 +48,18 @@ const patients = (req, res) => {
 };
 
 const appointments = (req, res) => {
-  const { email, password } = req.body;
-  console.log(req.body);
+  
+  const { id } = req.params;
+
   sql.customQuery(
-    `SELECT 
-         did, name, email, 
-         phone, gender, address, 
-         clinicName, speciality, 
-         pmdcNumber, availability, 
-         createdAt, status 
-         FROM 
-         doctor 
-         WHERE email = '${email}' 
-         AND 
-         password = '${password}'`,
+    `SELECT  * FROM purchased_appointments WHERE doctor_id = '${id}'`,
     (result, isError) => {
       if (!isError && result?.length) {
-        res.json({ success: true, data: result[0] });
+        res.json({ success: true, data: result });
       } else if (!isError && !result?.length) {
         res.json({
           success: false,
-          message: "no identity corresponds to these credentials",
+          message: "You have not been assigned to any appointment",
         });
       } else {
         res.json({ success: false, error: result });
@@ -158,7 +139,7 @@ const getPatients = async (req, res) => {
     `SELECT * FROM ${userType} WHERE assigned_doctorId = '${id}'`,
     (result, isError) => {
       if (!isError && result?.length) {
-        res.json({ success: true, beneficiaries: result });
+        res.json({ success: true, data: result });
       } else if (!isError && !result?.length) {
         res.json({
           success: false,
