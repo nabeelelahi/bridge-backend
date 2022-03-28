@@ -85,7 +85,7 @@ const requestAppointment = (req, res) => {
     amount,	
     discount,	
     price,	
-    discripton,	
+    discription,	
     date,	
     time,	
     created_at,	

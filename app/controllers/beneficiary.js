@@ -4,13 +4,21 @@ const uid = require('../helpers/uid')
 const pw = require('../helpers/pw')
 
 const beneficairyLogin = (req, res) => {
-    
+
     const { email, password } = req.body
-    
+
     console.log(req.body)
-    
+
     sql.customQuery(
-        `SELECT bid, name, email, phone, CNIC, sid, status 
+        `SELECT 
+        id, 
+        name, 
+        email, 
+        phone, 
+        CNIC, 
+        sponsor_id, 
+        status, 
+        assigned_doctorId 
          FROM 
          beneficiary 
          WHERE email = '${email}' 
