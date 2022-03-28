@@ -21,39 +21,39 @@ const {
   getOrders
 } = require('../controllers').admin
 
-router.get(`/${DEV_BASEURL}/admin/GET/all-sponsors`, getAllSponsor)
+router.get(`${DEV_BASEURL}/admin/GET/all-sponsors`, getAllSponsor)
 
-router.get(`/${DEV_BASEURL}/admin/GET/all-doctors`, getAllDoctor)
+router.get(`${DEV_BASEURL}/admin/GET/all-doctors`, getAllDoctor)
 
-router.get(`/${DEV_BASEURL}/admin/GET/all-callingAgents`, getAllCallingAgent)
+router.get(`${DEV_BASEURL}/admin/GET/all-callingAgents`, getAllCallingAgent)
 
-router.get(`/${DEV_BASEURL}/admin/GET/all-beneficiaries`, getAllBeneficiaries)
+router.get(`${DEV_BASEURL}/admin/GET/all-beneficiaries`, getAllBeneficiaries)
 
-router.post(`/${DEV_BASEURL}/admin/POST/login`, loginAdmin)
+router.post(`${DEV_BASEURL}/admin/POST/login`, loginAdmin)
 
-router.get(`/${DEV_BASEURL}/admin/GET/sponsor/profile-requests`, getSponsorProfileRequestsPending)
+router.get(`${DEV_BASEURL}/admin/GET/sponsor/profile-requests`, getSponsorProfileRequestsPending)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/accept/sponsor/profile/request`, acceptSponsorProfileRequest)
+router.put(`${DEV_BASEURL}/admin/PUT/accept-sponsor-profile-request`, acceptSponsorProfileRequest)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/reject/sponsor/profile/request`, rejectSponsorProfileRequest)
+router.put(`${DEV_BASEURL}/admin/PUT/reject/sponsor/profile/request`, rejectSponsorProfileRequest)
 
-router.post(`/${DEV_BASEURL}/admin/POST/create/new/calling-agent`, createCallingAgentProfile)
+router.post(`${DEV_BASEURL}/admin/POST/create/new/calling-agent`, createCallingAgentProfile)
 
-router.post(`/${DEV_BASEURL}/admin/POST/create/new/doctor`, createDoctorProfile)
+router.post(`${DEV_BASEURL}/admin/POST/create/new/doctor`, createDoctorProfile)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/terminate-sponsor/:sid`, terminateSponsor)
+router.put(`${DEV_BASEURL}/admin/PUT/terminate-sponsor/:sid`, terminateSponsor)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/terminate-doctor/:did`, terminateDoctor)
+router.put(`${DEV_BASEURL}/admin/PUT/terminate-doctor/:did`, terminateDoctor)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/terminate-calling-agent/:caid`, terminateCallingAgent)
+router.put(`${DEV_BASEURL}/admin/PUT/terminate-calling-agent/:caid`, terminateCallingAgent)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/activate-sponsor/:sid`, activateSponsor)
+router.put(`${DEV_BASEURL}/admin/PUT/activate-sponsor/:sid`, activateSponsor)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/activate-doctor/:did`, activateDoctor)
+router.put(`${DEV_BASEURL}/admin/PUT/activate-doctor/:did`, activateDoctor)
 
-router.put(`/${DEV_BASEURL}/admin/PUT/activate-calling-agent/:caid`, activateCallingAgent)
+router.put(`${DEV_BASEURL}/admin/PUT/activate-calling-agent/:caid`, activateCallingAgent)
 
-router.get(`/${DEV_BASEURL}/admin/GET/get-orders/:categoryType`, getOrders)
+router.get(`${DEV_BASEURL}/admin/GET/get-orders/:categoryType`, getOrders)
 
 // router.post(`/${BASE_URL}/POST/admin/account/password/reset/link`, generateResetAdminPasswordLink)
 

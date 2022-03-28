@@ -157,7 +157,7 @@ const getPatients = async (req, res) => {
 const updateHER = (req, res) => {
 
   const {
-    previourHER,
+    previousHER,
     patientId,
     sugar,
     bloodPressure,
@@ -170,7 +170,9 @@ const updateHER = (req, res) => {
     weight,
   } = req.body
 
-  if(previourHER){
+  console.log(previousHER)
+
+  if(!previousHER){
     
     const query = `INSERT INTO her 
   (
@@ -217,15 +219,15 @@ const updateHER = (req, res) => {
   else{
 
     const query = `UPDATE her SET 
-    sugar = ${sugar},
-    bloodPressure = ${bloodPressure},
-    ear = ${ear},
-    eye = ${eye},
-    hRate = ${hRate},
-    height = ${height},
-    skin = ${skin},
-    tempreture ${tempreture},
-    weight ${weight}, 
+    sugar = '${sugar}',
+    bloodPressure = '${bloodPressure}',
+    ear = '${ear}',
+    eye = '${eye}',
+    hRate = '${hRate}',
+    height = '${height}',
+    skin = '${skin}',
+    tempreture = '${tempreture}',
+    weight = '${weight}'
     WHERE patientId = '${patientId}'`
 
     sql.customQuery(

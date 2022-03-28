@@ -42,7 +42,7 @@ module.exports = {
     })
 
     //Greet api
-    app.get(`/${DEV_BASEURL}/greet`, (req, res) => {
+    app.get(`${DEV_BASEURL}/greet`, (req, res) => {
       res.render('greet')
       return res
     })

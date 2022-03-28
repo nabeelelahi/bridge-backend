@@ -17,18 +17,20 @@ function creds() {
     mailingCreds: {
       service: 'Gmail',
       port: 25,
-      secure: false,
+      secure: true,
       auth: {
         user:'nabeelelahi2000@gmail.com',
-        pass:'html5css3js'
+        pass:'Nabeel@2000'
         // user:'silvertechsolutions19@gmail.com',
         // pass:'Power123!!'
+        // user:'nabeel2kkun@gmail.com',
+        // pass:'html5css3js'
         // user: 'ba@silvertechsolutions.net',
         // pass: 'JHwPMLyKVzOZ'
       },
       tls: {
         // do not fail on invalid certs
-        rejectUnauthorized: false
+        rejectUnauthorized: true
       },
     }
   }

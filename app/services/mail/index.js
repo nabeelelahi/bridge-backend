@@ -60,7 +60,7 @@ const mail = async (purpose, data) => {
     case 'profile-creation-callingAgent':
       let callingAgentProfileConfirmationEmailResult = await transporter
         .sendMail({
-          from: creds().mailingCreds.user,
+          from: creds().mailingCreds.auth.user,
           to: data.email,
           subject: 'Profile Creation',
           text: 'credentials allotment to use the web panel',
@@ -84,7 +84,7 @@ const mail = async (purpose, data) => {
     case 'profile-creation-sponsor':
       let sponsorProfileConfirmationEmailResult = await transporter
         .sendMail({
-          from: creds().mailingCreds.user,
+          from: creds().mailingCreds.auth.user,
           to: data.email,
           subject: 'Profile Creation',
           text: 'credentials allotment to use the mobile app',

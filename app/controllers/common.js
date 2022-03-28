@@ -34,7 +34,15 @@ const servicesByType = (req, res) => {
 };
 
 const servicesByCategory = (req, res) => {
-  let getAllServicesQuery = `SELECT * FROM service WHERE category_type = '${req.params.category}' AND type = '${req.params.type}'`;
+  let getAllServicesQuery = `
+  SELECT 
+  title,
+  description,
+  discount,
+  price,
+  category_type
+  FROM service WHERE category_type = '${req.params.category}'
+  `;
   sql.customQuery(getAllServicesQuery, (result, isError) => {
     if (!isError && result?.length) {
       res.json({ success: true, data: result });
@@ -126,6 +134,8 @@ const requestMedicine = (req, res) => {
     serviceId,
     serviceName,
     amount,
+    date,
+    time,
     discount,
     price,
     discription,
@@ -141,7 +151,9 @@ const requestMedicine = (req, res) => {
     service_name,
     amount,	
     discount,	
-    price,	
+    price,
+    date,
+    time,	
     discription,	
     created_at,	
     status,	
@@ -155,6 +167,8 @@ const requestMedicine = (req, res) => {
        '${amount}', 
        '${discount}',  
        '${price}',  
+       '${date}',
+    '${time}',
        '${discription}',
        '${createdAt}',  
        '${status}', 
@@ -255,13 +269,25 @@ const getPreviousOrders = (req, res) => {
 
   let category;
 
-  if(categoryType === "appointment") category = "purchased_appointments" 
-    
-  if(categoryType === "medicine") category = "purchased_medicines" 
-  
-  if(categoryType === "labtest") category = "purchased_labtests" 
+  if (categoryType === "appointment") category = "purchased_appointments"
 
-  const query = `SELECT * FROM ${category} WHERE buyer_id = '${id}' AND buyer_type = '${buyerType}'`;
+  if (categoryType === "medicine" || categoryType ===  "medication") category = "purchased_medicines"
+
+  if (categoryType === "labtest") category = "purchased_labtests"
+
+  const query = `
+  SELECT 		
+    service_name,	
+    amount,	
+    discount,	
+    price,	
+    discription,	
+    date,
+    time,	
+    created_at,	
+    status
+  FROM ${category} WHERE buyer_id = '${id}' AND buyer_type = '${buyerType}'
+  `;
 
   sql.customQuery(
     query,
@@ -282,7 +308,7 @@ const getPreviousOrders = (req, res) => {
 
 const getHER = (req, res) => {
 
-  const { id } = req.params; 
+  const { id } = req.params;
 
   const query = `SELECT * FROM her WHERE patientId = '${id}'`;
 
@@ -311,5 +337,5 @@ module.exports = {
   requestMedicine,
   requestLabTest,
   getPreviousOrders,
-  getHER 
+  getHER
 };

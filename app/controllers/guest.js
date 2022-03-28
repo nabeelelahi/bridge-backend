@@ -8,7 +8,9 @@ const login = (req, res) => {
   const guestId = uid(16,"-");
   sql.customQuery(
     `SELECT
-         email  
+         email,
+         id, 
+         photo  
          FROM
          guest 
          WHERE email = '${email}'`,

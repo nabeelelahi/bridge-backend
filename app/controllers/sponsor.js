@@ -37,7 +37,7 @@ const requestForProfile = (req, res) => {
            VALUES ('${uid(
              16,
              "-"
-           )}', '${name}', '${email}', '${phone}', '${cnic}', '${age}', '${maritalStatus}', '${frequentCallAllowed}', '${bloodGroup}', '${preferredWayOfContact}', '${primaryAddress}', '${secondaryAddress}', '${city}', '${state}', '${postalCode}', '${gender}', 'PENDING_ADMIN_APPROVAL')              
+           )}', '${name}', '${email}', '${phone}', '${cnic}', '${age}', '${maritalStatus}', '${frequentCallAllowed}', '${bloodGroup}', '${preferredWayOfContact}', '${primaryAddress}', '${secondaryAddress}', '${city}', '${state}', '${postalCode}', '${gender}', 'PENDING')              
            `,
           (result, isError) => {
             if (!isError) {
@@ -65,10 +65,8 @@ const requestForProfile = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
-  console.log(password);
   sql.customQuery(
-    `SELECT id, name, email, phone, CNIC, status 
+    `SELECT id, name, email, phone, CNIC, status, assigned_doctorId 
          FROM 
          sponsor 
          WHERE email = '${email}' 
@@ -91,10 +89,10 @@ const login = (req, res) => {
 };
 
 const beneficiaries = (req, res) => {
-  const { sid } = req.params;
+  const { sponserId } = req.params;
 
   sql.customQuery(
-    `SELECT id, name, email, phone, cnic, sponsor_id FROM beneficiary WHERE sponsor_id = '${sid}'`,
+    `SELECT id, name, email, phone, cnic, sponsor_id FROM beneficiary WHERE sponsor_id = '${sponserId}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, beneficiaries: result });
@@ -126,11 +124,14 @@ const newBeneficiary = (req, res) => {
     state,
     postalCode,
     gender,
+    created_at,
+    assigned_doctorId,
+    sponsor_id
   } = req.body;
 
   const beneficiaryId = uid(16, "-");
 
-  console.log(req.body, "body");
+  // console.log(req.body, "body");
 
   sql.customQuery(
     `SELECT name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, relation_with_sponsor, primary_address, secondary_address, city, state, postal_code, gender, status FROM beneficiary WHERE name = '${name}' OR email = '${email}' OR phone = '${phone}'`,
@@ -143,8 +144,8 @@ const newBeneficiary = (req, res) => {
         });
       } else if (!isError && !result?.length) {
         sql.customQuery(
-          `INSERT INTO beneficiary (id, name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, relation_with_sponsor, primary_address, secondary_address, city, state, postal_code, gender, status)
-           VALUES ('${beneficiaryId}', '${name}', '${email}', '${phone}', ${cnic}, '${age}', '${maritalStatus}', '${frequentCallAllowed}', '${bloodGroup}', '${preferredWayOfContact}', '${relationWithSponsor}', '${primaryAddress}', '${secondaryAddress}', '${city}', '${state}', ${postalCode}, '${gender}', 'PENDING_ADMIN_APPROVAL')              
+          `INSERT INTO beneficiary (id, name, email, phone, cnic, sponsor_id, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, relation_with_sponsor, primary_address, secondary_address, city, state, postal_code, gender, status, created_at, assigned_doctorId)
+           VALUES ('${beneficiaryId}', '${name}', '${email}', '${phone}', ${cnic}, '${sponsor_id}', '${age}', '${maritalStatus}', '${frequentCallAllowed}', '${bloodGroup}', '${preferredWayOfContact}', '${relationWithSponsor}', '${primaryAddress}', '${secondaryAddress}', '${city}', '${state}', ${postalCode}, '${gender}', 'PENDING', '${created_at}', '${assigned_doctorId}')              
            `,
           (result, isError) => {
             if (!isError) {

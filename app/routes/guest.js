@@ -5,6 +5,6 @@ const {
     login
 } = require('../controllers').guest
 
-router.post(`/${DEV_BASEURL}/guest/POST/login`, login)
+router.post(`${DEV_BASEURL}/guest/POST/login`, login)
 
 module.exports = router

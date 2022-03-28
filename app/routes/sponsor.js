@@ -5,16 +5,16 @@ const { requestForProfile, login, beneficiaries, newBeneficiary } =
   require("../controllers").sponsor;
 
 router.post(
-  `/${DEV_BASEURL}/sponsor/POST/request/create/profile`,
+  `${DEV_BASEURL}/sponsor/POST/request/create/profile`,
   requestForProfile
 );
 
-router.post(`/${DEV_BASEURL}/sponsor/POST/login/`, login);
+router.post(`${DEV_BASEURL}/sponsor/POST/login/`, login);
 
-router.get(`/${DEV_BASEURL}/sponsor/GET/beneficiaries/:sponserId`, beneficiaries);
+router.get(`${DEV_BASEURL}/sponsor/GET/beneficiaries/:sponserId`, beneficiaries);
 
 router.post(
-  `/${DEV_BASEURL}/sponsor/POST/register-beneficiary`,
+  `${DEV_BASEURL}/sponsor/POST/register-beneficiary`,
   newBeneficiary
 );
 

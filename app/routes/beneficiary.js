@@ -5,6 +5,6 @@ const {
     beneficairyLogin
 } = require('../controllers').beneficairy
 
-router.post(`/${DEV_BASEURL}/beneficiary/POST/login`, beneficairyLogin)
+router.post(`${DEV_BASEURL}/beneficiary/POST/login`, beneficairyLogin)
 
 module.exports = router
