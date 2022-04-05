@@ -11,6 +11,7 @@ const {
   createDoctorProfile,
   getAllDoctor,
   getAllCallingAgent,
+  getAllGuests,
   terminateSponsor,
   terminateDoctor,
   terminateCallingAgent,
@@ -20,6 +21,8 @@ const {
   activateSponsor,
   getOrders
 } = require('../controllers').admin
+
+router.get(`${DEV_BASEURL}/admin/GET/all-guests`, getAllGuests)
 
 router.get(`${DEV_BASEURL}/admin/GET/all-sponsors`, getAllSponsor)
 

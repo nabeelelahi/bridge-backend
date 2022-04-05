@@ -60,6 +60,22 @@ const getSponsorProfileRequestsPending = (req, res) => {
   return res;
 };
 
+const getAllGuests = (req, res) => {
+  sql.customQuery(
+    `SELECT id, name, email, status, created_at FROM guest`,
+    (result, isError) => {
+      if (!isError && result?.length) {
+        res.json({ success: true, guests: result });
+      } else if (!isError && !result?.length) {
+        res.json({ success: false, message: "No sponser registered yet" });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+  return res;
+};
+
 const getAllSponsor = (req, res) => {
   sql.customQuery(
     `SELECT id, name, email, phone, cnic, status, created_at FROM sponsor`,
@@ -78,7 +94,7 @@ const getAllSponsor = (req, res) => {
 
 const getAllBeneficiaries = (req, res) => {
   sql.customQuery(
-    `SELECT id, first_name, last_name, email, phone, cnic, age, gender, sponsor_id, status FROM beneficiary`,
+    `SELECT id, name, email, phone, cnic, age, gender, sponsor_id, status FROM beneficiary`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, beneficiaries: result });
@@ -97,7 +113,7 @@ const getAllBeneficiaries = (req, res) => {
 
 const getAllDoctor = (req, res) => {
   sql.customQuery(
-    `SELECT id, name, email, phone, gender, address, speciality, pmdc_number, working_hours, created_at, status FROM doctor`,
+    `SELECT id, name, email, phone, gender, address, speciality, cnic, pmdc_number, working_hours, created_at, status FROM doctor`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, doctors: result });
@@ -494,6 +510,7 @@ module.exports = {
   rejectSponsorProfileRequest,
   createDoctorProfile,
   createCallingAgentProfile,
+  getAllGuests,
   getAllSponsor,
   getAllDoctor,
   getAllCallingAgent,

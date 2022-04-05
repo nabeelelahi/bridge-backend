@@ -14,6 +14,6 @@ router.get(`${DEV_BASEURL}/callingAgent/GET/sponsors`, getSponsors)
 
 router.get(`${DEV_BASEURL}/callingAgent/GET/order-requests/:categoryType`, getOrderRequests)
 
-router.patch(`${DEV_BASEURL}/callingAgent/PATCH/approve-order/:id/:categoryType`, approveOrderRequest)
+router.put(`${DEV_BASEURL}/callingAgent/PATCH/approve-order/:id/:categoryType`, approveOrderRequest)
 
 module.exports = router;

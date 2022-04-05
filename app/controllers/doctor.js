@@ -170,8 +170,6 @@ const updateHER = (req, res) => {
     weight,
   } = req.body
 
-  console.log(previousHER)
-
   if(!previousHER){
     
     const query = `INSERT INTO her 
@@ -194,7 +192,7 @@ const updateHER = (req, res) => {
        '${ear}',  
        '${eye}',  
        '${hRate}',  
-       '${height}',  
+       "${height}",  
        '${skin}',  
        '${tempreture}',  
        '${weight}'

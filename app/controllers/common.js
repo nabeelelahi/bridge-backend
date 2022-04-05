@@ -310,22 +310,20 @@ const getHER = (req, res) => {
 
   const { id } = req.params;
 
-  const query = `SELECT * FROM her WHERE patientId = '${id}'`;
-
   sql.customQuery(
-    query,
+    `SELECT * FROM her WHERE patientId = '${id}'`,
     (result, isError) => {
-
       if (!isError && result?.length) {
         res.json({ success: true, data: result });
-      }
-      if (!isError && !result?.length) {
-        res.json({ success: false, message: 'Your HER has not been updated' });
-      }
-      else {
+      } else if (!isError && !result?.length) {
+        res.json({ success: false, message: "No sponser registered yet" });
+      } else {
         res.json({ success: false, error: result });
       }
-    });
+    }
+  );
+  return res;
+
   return res;
 };
 

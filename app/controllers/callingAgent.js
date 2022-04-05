@@ -70,6 +70,8 @@ const approveOrderRequest = (req, res) => {
 
     const { id, categoryType } = req.params
 
+    let query;
+
     let category;
 
     if (categoryType === "appointment") category = "purchased_appointments"
@@ -78,11 +80,22 @@ const approveOrderRequest = (req, res) => {
 
     if (categoryType === "labtest") category = "purchased_labtests"
 
+    
+    if(req.body) {
+       query = `UPDATE ${category} SET 
+        status = 'SCHEDULED', 
+        date = '${req.body.date}', 
+        time = '${req.body.time}' WHERE id = '${id}'`
+    }
+    else query = `UPDATE ${category} SET status = 'SCHEDULED' WHERE id = '${id}'`
+
+    console.log(query)
+
     sql.customQuery(
-        `UPDATE ${category} SET status = 'APPROVED' WHERE id = '${id}'`,
+        query,
         (result, isError) => {
             if (!isError) {
-                res.json({ success: true, message: 'Request Approved successfully' })
+                res.json({ success: true, message: 'Request Approved Successfully' })
             }
             else {
                 res.json({ success: false, error: isError })
