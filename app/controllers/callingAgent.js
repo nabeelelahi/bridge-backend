@@ -81,7 +81,7 @@ const approveOrderRequest = (req, res) => {
     if (categoryType === "labtest") category = "purchased_labtests"
 
     
-    if(req.body) {
+    if(req.body.date && req.body.time) {
        query = `UPDATE ${category} SET 
         status = 'SCHEDULED', 
         date = '${req.body.date}', 

@@ -78,7 +78,7 @@ const getAllGuests = (req, res) => {
 
 const getAllSponsor = (req, res) => {
   sql.customQuery(
-    `SELECT id, name, email, phone, cnic, status, created_at FROM sponsor`,
+    `SELECT id, name, email, phone, cnic, status, created_at FROM sponsor WHERE status != 'PENDING'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, sponsors: result });

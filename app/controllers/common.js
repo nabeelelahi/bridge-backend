@@ -35,7 +35,8 @@ const servicesByType = (req, res) => {
 
 const servicesByCategory = (req, res) => {
   let getAllServicesQuery = `
-  SELECT 
+  SELECT
+  id, 
   title,
   description,
   discount,
@@ -271,12 +272,13 @@ const getPreviousOrders = (req, res) => {
 
   if (categoryType === "appointment") category = "purchased_appointments"
 
-  if (categoryType === "medicine" || categoryType ===  "medication") category = "purchased_medicines"
+  if (categoryType === "medicine" || categoryType === "medication") category = "purchased_medicines"
 
   if (categoryType === "labtest") category = "purchased_labtests"
 
   const query = `
   SELECT 		
+  id,
     service_name,	
     amount,	
     discount,	
@@ -327,6 +329,31 @@ const getHER = (req, res) => {
   return res;
 };
 
+// prescription
+
+const getPrescription = (req, res) => {
+
+  const { appointment_id } = req.params
+
+  sql.customQuery(
+    `SELECT appointment_id, title, description FROM prescription WHERE appointment_id = ${appointment_id}`,
+    (result, isError) => {
+
+      if (!isError && result?.length) {
+        res.json({ success: true, data: result });
+      }
+      else if (!isError && !result?.length) {
+        res.json({ success: false, message: "No prescription found" });
+      }
+      else {
+        res.json({ success: false, error: result });
+      }
+
+    });
+
+  return res;
+};
+
 module.exports = {
   services,
   servicesByCategory,
@@ -335,5 +362,6 @@ module.exports = {
   requestMedicine,
   requestLabTest,
   getPreviousOrders,
-  getHER
+  getHER,
+  getPrescription
 };

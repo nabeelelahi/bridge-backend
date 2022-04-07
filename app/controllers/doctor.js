@@ -48,11 +48,11 @@ const patients = (req, res) => {
 };
 
 const appointments = (req, res) => {
-  
-  const { id } = req.params;
+
+  const { id, status } = req.params;
 
   sql.customQuery(
-    `SELECT  * FROM purchased_appointments WHERE doctor_id = '${id}'`,
+    `SELECT  * FROM purchased_appointments WHERE doctor_id = '${id}' AND status = '${status}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, data: result });
@@ -170,8 +170,8 @@ const updateHER = (req, res) => {
     weight,
   } = req.body
 
-  if(!previousHER){
-    
+  if (!previousHER) {
+
     const query = `INSERT INTO her 
   (
     patientId,
@@ -199,7 +199,7 @@ const updateHER = (req, res) => {
        )              
      `
 
-     sql.customQuery(
+    sql.customQuery(
       query,
       (result, isError) => {
         if (!isError) {
@@ -214,7 +214,7 @@ const updateHER = (req, res) => {
     );
 
   }
-  else{
+  else {
 
     const query = `UPDATE her SET 
     sugar = '${sugar}',
@@ -231,18 +231,73 @@ const updateHER = (req, res) => {
     sql.customQuery(
       query,
       (result, isError) => {
-          if (!isError) {
-              res.json({ success: true, message: 'HER has been updated successfully' })
-          }
-          else {
-              res.json({ success: false, error: isError })
-          }
+        if (!isError) {
+          res.json({ success: true, message: 'HER has been updated successfully' })
+        }
+        else {
+          res.json({ success: false, error: isError })
+        }
       }
-  )
+    )
 
   }
 
   return res;
+
+}
+
+const writePrescription = (req, res) => {
+
+  const {
+    title,
+    description,
+    appointment_id,
+    buyer_id,
+    created_at,
+    created_by,
+    doctor_id
+  } = req.body
+
+  const query = `INSERT INTO 
+  prescription (
+    title,	
+    description,	
+    appointment_id,	
+    buyer_id,	
+    doctor_id,	
+    created_by,	
+    created_at
+    )
+  VALUES (
+    '${title}',	
+    '${description}',	
+    '${appointment_id}',	
+    '${buyer_id}',	
+    '${doctor_id}',	
+    '${created_by}',	
+    '${created_at}'
+    );`
+
+    sql.customQuery(
+      query,
+      (result, isError) => {
+        if (!isError) {
+          sql.customQuery(
+            `UPDATE purchased_appointments SET status = 'COMPLETED' WHERE id = '${appointment_id}'`,
+            (result, isError) => {
+                if (!isError) {
+                    res.json({ success: true, message: 'Prescription has been Updated Appointment is completed' })
+                }
+                else {
+                    res.json({ success: false, error: isError })
+                }
+            }
+        )
+        } else {
+          res.json({ success: false, error: result });
+        }
+      }
+    );
 
 }
 
@@ -253,5 +308,6 @@ module.exports = {
   upcomingAppointments,
   appointmentDetails,
   getPatients,
-  updateHER
+  updateHER,
+  writePrescription
 };
