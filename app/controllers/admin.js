@@ -7,12 +7,13 @@ const jwt = require("../helpers/jwt");
 const loginAdmin = (req, res) => {
   const { email, password } = req.body;
 
+  console.log(email, password);
+
   sql.customQuery(
     `SELECT * FROM admin WHERE email = '${email}' AND password = '${password}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         // const token = jwt.getToken({}, email+password, '1d' )
-        // console.log(email, password);
         delete result[0].password;
         res.json({
           success: true,

@@ -6,6 +6,8 @@ const {
     getSponsors,
     getOrderRequests,
     approveOrderRequest,
+    getOrder,
+    getAllOrders
 } = require('../controllers').callingAgent
 
 router.post(`${DEV_BASEURL}/callingAgent/POST/login`, callingAgentLogin)
@@ -13,6 +15,10 @@ router.post(`${DEV_BASEURL}/callingAgent/POST/login`, callingAgentLogin)
 router.get(`${DEV_BASEURL}/callingAgent/GET/sponsors`, getSponsors)
 
 router.get(`${DEV_BASEURL}/callingAgent/GET/order-requests/:categoryType`, getOrderRequests)
+
+router.get(`${DEV_BASEURL}/callingAgent/GET/order/:categoryType`, getOrder)
+
+router.get(`${DEV_BASEURL}/callingAgent/GET/all-order/:categoryType`, getAllOrders)
 
 router.put(`${DEV_BASEURL}/callingAgent/PATCH/approve-order/:id/:categoryType`, approveOrderRequest)
 

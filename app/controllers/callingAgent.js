@@ -64,6 +64,61 @@ const getOrderRequests = (req, res) => {
         }
     )
     return res
+
+}
+
+const getOrder = (req, res) => {
+
+    const { categoryType } = req.params
+
+    let category;
+
+    if (categoryType === "appointment") category = "purchased_appointments"
+
+    if (categoryType === "medicine") category = "purchased_medicines"
+
+    if (categoryType === "labtest") category = "purchased_labtests"
+
+    sql.customQuery(
+        `SELECT * FROM ${category}  WHERE status != 'PENDING'`,
+        (result, isError) => {
+            if (!isError && result?.length) {
+                res.json({ success: true, data: result })
+            } else if (!isError && !result?.length) {
+                res.json({ success: false, message: "no requests found" })
+            } else {
+                res.json({ success: false, error: result })
+            }
+        }
+    )
+    return res
+}
+
+const getAllOrders = (req, res) => {
+
+    const { categoryType } = req.params
+
+    let category;
+
+    if (categoryType === "appointment") category = "purchased_appointments"
+
+    if (categoryType === "medicine") category = "purchased_medicines"
+
+    if (categoryType === "labtest") category = "purchased_labtests"
+
+    sql.customQuery(
+        `SELECT * FROM ${category}`,
+        (result, isError) => {
+            if (!isError && result?.length) {
+                res.json({ success: true, data: result })
+            } else if (!isError && !result?.length) {
+                res.json({ success: false, message: "no requests found" })
+            } else {
+                res.json({ success: false, error: result })
+            }
+        }
+    )
+    return res
 }
 
 const approveOrderRequest = (req, res) => {
@@ -110,4 +165,6 @@ module.exports = {
     getSponsors,
     getOrderRequests,
     approveOrderRequest,
+    getOrder,
+    getAllOrders
 }
