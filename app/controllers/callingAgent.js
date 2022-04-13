@@ -160,11 +160,49 @@ const approveOrderRequest = (req, res) => {
     return res
 }
 
+const changeOrderStatus = (req, res) => {
+
+    const { id, categoryType, status } = req.params
+
+    let query;
+
+    let category;
+
+    if (categoryType === "appointment") category = "purchased_appointments"
+
+    if (categoryType === "medicine") category = "purchased_medicines"
+
+    if (categoryType === "labtest") category = "purchased_labtests"
+
+    
+    if(req.body.date && req.body.time) {
+       query = `UPDATE ${category} SET 
+        status = 'SCHEDULED', 
+        date = '${req.body.date}', 
+        time = '${req.body.time}' WHERE id = '${id}'`
+    }
+    else query = `UPDATE ${category} SET status = '${status}' WHERE id = '${id}'`
+
+    sql.customQuery(
+        query,
+        (result, isError) => {
+            if (!isError) {
+                res.json({ success: true, message: 'Request Completed Successfully' })
+            }
+            else {
+                res.json({ success: false, error: isError })
+            }
+        }
+    )
+    return res
+}
+
 module.exports = {
     callingAgentLogin,
     getSponsors,
     getOrderRequests,
     approveOrderRequest,
     getOrder,
-    getAllOrders
+    getAllOrders,
+    changeOrderStatus
 }

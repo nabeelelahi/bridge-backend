@@ -329,6 +329,27 @@ const getHER = (req, res) => {
   return res;
 };
 
+const getCombordites = (req, res) => {
+
+  const { id } = req.params;
+
+  sql.customQuery(
+    `SELECT * FROM comobordites WHERE patient_id = '${id}'`,
+    (result, isError) => {
+      if (!isError && result?.length) {
+        res.json({ success: true, data: result });
+      } else if (!isError && !result?.length) {
+        res.json({ success: false, message: "No sponser registered yet" });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+  return res;
+
+  return res;
+};
+
 // prescription
 
 const getPrescription = (req, res) => {
@@ -363,5 +384,6 @@ module.exports = {
   requestLabTest,
   getPreviousOrders,
   getHER,
+  getCombordites,
   getPrescription
 };

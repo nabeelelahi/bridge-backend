@@ -246,6 +246,97 @@ const updateHER = (req, res) => {
 
 }
 
+const updateComobordites = (req, res) => {
+
+  const {
+    previousHER,
+    patient_id,
+    hepatitis_b,
+    hepatitis_c,
+    TB,
+    organ_transplant,
+    on_dialysis,
+    tuber_clouses,
+    diabetes_mellitus,
+    other_mallgancies,
+    created_at
+  } = req.body
+
+  if (!previousHER) {
+
+    const query = `INSERT INTO comobordites 
+  (
+    patient_id,
+    hepatitis_b,
+    hepatitis_c,
+    TB,
+    organ_transplant,
+    on_dialysis,
+    tuber_clouses,
+    diabetes_mellitus,
+    other_mallgancies,
+    created_at
+    )
+     VALUES ( 
+      '${patient_id}',
+      '${hepatitis_b}',
+      '${hepatitis_c}',
+      '${TB}',
+      '${organ_transplant}',
+      '${on_dialysis}',
+      '${tuber_clouses}',
+      '${diabetes_mellitus}',
+      '${other_mallgancies}',
+      '${created_at}'
+       )              
+     `
+
+    sql.customQuery(
+      query,
+      (result, isError) => {
+        if (!isError) {
+          res.json({
+            success: true,
+            message: "Comobordites has been updated successfully",
+          });
+        } else {
+          res.json({ success: false, error: result });
+        }
+      }
+    );
+
+  }
+  else {
+
+    const query = `UPDATE comobordites SET 
+    hepatitis_b = '${hepatitis_b}',
+    hepatitis_c = '${hepatitis_c}',
+    TB = '${TB}',
+    organ_transplant = '${organ_transplant}',
+    on_dialysis = '${on_dialysis}',
+    tuber_clouses = '${tuber_clouses}',
+    diabetes_mellitus = '${diabetes_mellitus}',
+    other_mallgancies = '${other_mallgancies}'
+    WHERE patient_id = '${patient_id}'`
+
+    sql.customQuery(
+      query,
+      (result, isError) => {
+        if (!isError) {
+          res.json({ success: true, message: 'Comobordites has been updated successfully' })
+        }
+        else {
+          res.json({ success: false, error: result })
+        }
+      }
+    )
+
+  }
+
+  return res;
+
+}
+
 const writePrescription = (req, res) => {
 
   const {
@@ -278,26 +369,26 @@ const writePrescription = (req, res) => {
     '${created_at}'
     );`
 
-    sql.customQuery(
-      query,
-      (result, isError) => {
-        if (!isError) {
-          sql.customQuery(
-            `UPDATE purchased_appointments SET status = 'COMPLETED' WHERE id = '${appointment_id}'`,
-            (result, isError) => {
-                if (!isError) {
-                    res.json({ success: true, message: 'Prescription has been Updated Appointment is completed' })
-                }
-                else {
-                    res.json({ success: false, error: isError })
-                }
+  sql.customQuery(
+    query,
+    (result, isError) => {
+      if (!isError) {
+        sql.customQuery(
+          `UPDATE purchased_appointments SET status = 'COMPLETED' WHERE id = '${appointment_id}'`,
+          (result, isError) => {
+            if (!isError) {
+              res.json({ success: true, message: 'Prescription has been Updated Appointment is completed' })
             }
+            else {
+              res.json({ success: false, error: isError })
+            }
+          }
         )
-        } else {
-          res.json({ success: false, error: result });
-        }
+      } else {
+        res.json({ success: false, error: result });
       }
-    );
+    }
+  );
 
 }
 
@@ -309,5 +400,6 @@ module.exports = {
   appointmentDetails,
   getPatients,
   updateHER,
+  updateComobordites,
   writePrescription
 };

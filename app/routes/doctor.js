@@ -5,6 +5,7 @@ const {
     login,
     getPatients,
     updateHER,
+    updateComobordites,
     appointments,
     writePrescription
 } = require('../controllers').doctor
@@ -16,6 +17,8 @@ router.get(`${DEV_BASEURL}/doctor/GET/patients/:id/:userType`, getPatients)
 router.get(`${DEV_BASEURL}/doctor/GET/appointments/:id/:status`, appointments)
 
 router.post(`${DEV_BASEURL}/doctor/POST/update-HER`, updateHER)
+
+router.post(`${DEV_BASEURL}/doctor/POST/update-comobordites`, updateComobordites)
 
 router.post(`${DEV_BASEURL}/doctor/POST/write-prescription`, writePrescription)
 
