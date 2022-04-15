@@ -12,13 +12,8 @@ const {
   getAllDoctor,
   getAllCallingAgent,
   getAllGuests,
-  terminateSponsor,
-  terminateDoctor,
-  terminateCallingAgent,
+  updateUserStatus,
   getAllBeneficiaries,
-  activateCallingAgent,
-  activateDoctor,
-  activateSponsor,
   getOrders
 } = require('../controllers').admin
 
@@ -44,17 +39,7 @@ router.post(`${DEV_BASEURL}/admin/POST/create/new/calling-agent`, createCallingA
 
 router.post(`${DEV_BASEURL}/admin/POST/create/new/doctor`, createDoctorProfile)
 
-router.put(`${DEV_BASEURL}/admin/PUT/terminate-sponsor/:sid`, terminateSponsor)
-
-router.put(`${DEV_BASEURL}/admin/PUT/terminate-doctor/:did`, terminateDoctor)
-
-router.put(`${DEV_BASEURL}/admin/PUT/terminate-calling-agent/:caid`, terminateCallingAgent)
-
-router.put(`${DEV_BASEURL}/admin/PUT/activate-sponsor/:sid`, activateSponsor)
-
-router.put(`${DEV_BASEURL}/admin/PUT/activate-doctor/:did`, activateDoctor)
-
-router.put(`${DEV_BASEURL}/admin/PUT/activate-calling-agent/:caid`, activateCallingAgent)
+router.put(`${DEV_BASEURL}/admin/PUT/update-user-status/:userType/:status/:id`, updateUserStatus)
 
 router.get(`${DEV_BASEURL}/admin/GET/get-orders/:categoryType`, getOrders)
 

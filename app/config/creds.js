@@ -6,12 +6,21 @@ function creds() {
       user: 'root',
     },
 
+    // PROD_dbCreds: {
+    //   host: 'designalpha99.com',
+    //   user: 'designalpha99_bridge',
+    //   password: 'Nabeel12345',
+    //   database: 'designalpha99_bridge',
+      // debug: true
+    // },
+
     PROD_dbCreds: {
-      host: '',
-      user: '',
-      password: '',
-      database: '',
-      debug: false
+      host: 'bridgeconnect.pk',
+      user: 'bridgeco_nabeel',
+      password: 'Nabeel@2000',
+      database: 'bridgeco_bridge_db',
+      port: 3306,
+      // debug: false
     },
 
     mailingCreds: {
@@ -19,7 +28,7 @@ function creds() {
       port: 25,
       secure: true,
       auth: {
-        user:'nabeelelahi2000@gmail.com',
+        user:'Nabeelelahi2000@gmail.com',
         pass:'Nabeel@2000'
         // user:'silvertechsolutions19@gmail.com',
         // pass:'Power123!!'

@@ -1,15 +1,18 @@
 const mysql = require('mysql')
 const creds = require('./creds')
 
-// const pool = mysql.createPool(creds().PROD_dbCreds).once('connection', () => {
-//   console.log('CONNECTION HOGAYAAAAAAAA')
-// })
-
-const pool =  mysql.createPool(creds().DEV_dbCreds).once('connection', () => {
-  console.log('DATABASE CONNECTION ESTABLISHED')
+const pool = mysql.createPool(creds().PROD_dbCreds)//.connect()
+.once('connection', () => {
+  console.log('CONNECTION HOGAYAAAAAAAA')
 })
 
-const sql  =  {
+// console.log(creds().PROD_dbCreds)
+
+// const pool =  mysql.createPool(creds().DEV_dbCreds).once('connection', () => {
+//   console.log('DATABASE CONNECTION ESTABLISHED')
+// })
+
+const sql = {
   checkQuery: (tableName, values, cb) => {
     // console.log(values)
     let chkQ = `SELECT * FROM ${tableName} WHERE (${Object.entries(values).map(
@@ -83,10 +86,10 @@ const sql  =  {
     allRecords = false
   ) => {
     const sQ = `SELECT ${specificCols == null
-        ? '*'
-        : specificCols.map((key, i) => {
-          return key
-        })
+      ? '*'
+      : specificCols.map((key, i) => {
+        return key
+      })
       } FROM ${tableName} ${allRecords == false
         ? 'WHERE ' +
         Object.keys(values).map((key, i) => {
@@ -114,4 +117,4 @@ const sql  =  {
   }
 }
 
-module.exports = {pool, sql}
+module.exports = { pool, sql }

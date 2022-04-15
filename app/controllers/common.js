@@ -375,6 +375,53 @@ const getPrescription = (req, res) => {
   return res;
 };
 
+// sponsor
+
+const getSponsorById = (req, res) => {
+
+  const { sponsor_id } = req.params
+
+  sql.customQuery(
+    `SELECT id, name, email, phone, CNIC, status FROM sponsor WHERE id='${sponsor_id}'`,
+    (result, isError) => {
+      if (!isError && result?.length) {
+        res.json({ success: true, data: result })
+      } else if (!isError && !result?.length) {
+        res.json({ success: false, message: "no requests found" })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
+  return res
+}
+
+const getUserStatus = (req, res) => {
+
+  const { userType, id } = req.params
+
+  let table;
+
+  if (userType === 'doctor') table = 'doctor'
+  else if(userType === 'beneficiary') table = 'beneficiary'
+  else if(userType === 'sponsor') table = 'sponsor'
+
+    sql.customQuery(
+      `SELECT status FROM ${table} WHERE id='${id}'`,
+      (result, isError) => {
+        if (!isError && result?.length) {
+          res.json({ success: true, data: result[0] })
+        } else if (!isError && !result?.length) {
+          res.json({ success: false, message: "no requests found" })
+        } else {
+          res.json({ success: false, error: result })
+        }
+      }
+    )
+  return res
+
+}
+
 module.exports = {
   services,
   servicesByCategory,
@@ -385,5 +432,7 @@ module.exports = {
   getPreviousOrders,
   getHER,
   getCombordites,
-  getPrescription
+  getPrescription,
+  getSponsorById,
+  getUserStatus
 };

@@ -11,7 +11,9 @@ const {
     getPreviousOrders,
     getHER,
     getCombordites,
-    getPrescription
+    getPrescription,
+    getSponsorById,
+    getUserStatus
 } = require('../controllers').common
 
 router.get(`${DEV_BASEURL}/common/GET/services`, services)
@@ -33,5 +35,9 @@ router.get(`${DEV_BASEURL}/common/GET/her/:id`, getHER)
 router.get(`${DEV_BASEURL}/common/GET/combordites/:id`, getCombordites)
 
 router.get(`${DEV_BASEURL}/common/GET/prescription/:appointment_id`, getPrescription)
+
+router.get(`${DEV_BASEURL}/common/GET/sponsor/:sponsor_id`, getSponsorById)
+
+router.get(`${DEV_BASEURL}/common/GET/status/:userType/:id`, getUserStatus)
 
 module.exports = router

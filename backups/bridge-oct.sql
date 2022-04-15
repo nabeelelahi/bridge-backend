@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2022 at 10:23 PM
+-- Generation Time: Jan 21, 2022 at 07:51 PM
 -- Server version: 10.4.22-MariaDB
--- PHP Version: 7.4.27
+-- PHP Version: 8.0.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -128,9 +128,7 @@ CREATE TABLE `beneficiary` (
 --
 
 INSERT INTO `beneficiary` (`id`, `name`, `age`, `email`, `password`, `phone`, `cnic`, `marital_status`, `frequent_call_allowed`, `blood_group`, `relation_with_sponsor`, `preferred_way_of_contact`, `gender`, `primary_address`, `secondary_address`, `city`, `state`, `sponsor_id`, `postal_code`, `case_study`, `created_at`, `status`, `easypaisa_number`, `jazzcash_number`, `bank`, `card`, `assigned_doctorId`) VALUES
-('-1100C649DBC96-A', 'test', '19', 'testbeneficiary@gmail.com', '', '03160294629', 2147483647, 'Single', 'undefined', 'O', 'Brother', 'undefined', 'Male', '9/128', '9/128', 'Karachi', 'Pakistan', '-87108256947D-E6', 74600, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '1648912309135', 'PENDING', '', '', '', '', '1'),
-('-3F267557B9308-6', 'Muhid', '19', 'muhid@gmail.com', 'muhid123', '03123029462', 2147483647, 'Single', 'undefined', 'A+', 'Son', 'undefined', 'Male', '9/129 Liaqatabad Karachi', '9/129 Liaqatabad Karachi', 'Karachi', 'Pakistan', '-CC31A913CC3F7-7', 74600, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '1648463930661', 'APPROVED', '', '', '', '', 'BD-B7B3A692C81EA'),
-('-50D50A2233B27-7', 'Hamza', '19', 'hamza@gmail.com', '', '123213123', 2147483647, 'Single', 'undefined', '0+', 'Sponsor', 'undefined', 'Male', 'asdasdsadsadasasd', 'asdasdsadasd', 'Karachi', 'Pakistan', '-87108256947D-E6', 12345, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '1648899763345', 'PENDING', '', '', '', '', '1');
+('-7128E6E9B0923-5', 'Wea', '121', 'nabeelelahi2000@gmail.com', '', '12112121', 2147483647, 'asdasasdas', 'asdasd', 'asdas', 'Brother', 'asdas', 'asdasdasd', 'asdasd', 'asdasd', 'asdas', 'asdasd', '', 12345, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '', 'PENDING_ADMIN_APPROVAL', '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -158,8 +156,8 @@ CREATE TABLE `calling_agent` (
 --
 
 INSERT INTO `calling_agent` (`id`, `name`, `email`, `password`, `phone`, `gender`, `CNIC`, `salary`, `qualification`, `shift_timing`, `created_at`, `status`) VALUES
-('BAD-AD8F03788095', 'Hassan', 'hassanaly366@gmail.com', '4@*TThee#_2&%129', '3122025939', 'male', '3453453434553', '20000', 'Graduate', '[\"12:01 AM\",\"1:02 AM\"]', '2021-09-27 03:59:17', 'APPROVED'),
-('BAD-BB8640B5D500', 'Hassan', 'hassanaly633@gmail.com', 'hassan123', '3122025939', 'male', '3453453434553', '20000', 'Graduate', '[\"12:00 AM\",\"5:00 AM\"]', '2021-09-27 03:58:35', 'TERMINATED');
+('BAD-AD8F03788095', 'Hassan', 'hassanaly366@gmail.com', '4@*TThee#_2&%129', '3122025939', 'male', '3453453434553', '20000', 'Graduate', '[\"12:01 AM\",\"1:02 AM\"]', '2021-09-27 03:59:17', 'TERMINATED'),
+('BAD-BB8640B5D500', 'Hassan', 'hassanaly633@gmail.com', 'CTc243)1%%3&2#Jj', '3122025939', 'male', '3453453434553', '20000', 'Graduate', '[\"12:00 AM\",\"5:00 AM\"]', '2021-09-27 03:58:35', 'ACTIVE');
 
 -- --------------------------------------------------------
 
@@ -176,33 +174,6 @@ CREATE TABLE `care_giver` (
   `area` varchar(50) NOT NULL,
   `doctor_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `comobordites`
---
-
-CREATE TABLE `comobordites` (
-  `id` int(11) NOT NULL,
-  `patient_id` varchar(255) NOT NULL,
-  `hepatitis_b` enum('Yes','No') NOT NULL,
-  `hepatitis_c` enum('Yes','No') NOT NULL,
-  `TB` enum('Yes','No') NOT NULL,
-  `organ_transplant` enum('Yes','No') NOT NULL,
-  `on_dialysis` enum('Yes','No') NOT NULL,
-  `tuber_clouses` enum('Yes','No') NOT NULL,
-  `diabetes_mellitus` enum('Yes','No') NOT NULL,
-  `other_mallgancies` enum('Yes','No') NOT NULL,
-  `created_at` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `comobordites`
---
-
-INSERT INTO `comobordites` (`id`, `patient_id`, `hepatitis_b`, `hepatitis_c`, `TB`, `organ_transplant`, `on_dialysis`, `tuber_clouses`, `diabetes_mellitus`, `other_mallgancies`, `created_at`) VALUES
-(1, '-CC31A913CC3F7-7', 'No', 'Yes', 'No', 'No', 'No', 'No', 'Yes', 'Yes', '1649798236321');
 
 -- --------------------------------------------------------
 
@@ -232,8 +203,7 @@ CREATE TABLE `doctor` (
 --
 
 INSERT INTO `doctor` (`id`, `name`, `phone`, `email`, `password`, `gender`, `age`, `address`, `cnic`, `speciality`, `pmdc_number`, `working_hours`, `created_at`, `status`) VALUES
-('1', 'sadas', '3122025939', 'nabeelelahi2000@gmail.com', 'nabeel123', 'male', 0, '34J/ Jaffer Street', 'SilverTech Solutions', 'React Native', '12345', '[{\"startTime\":\"4:04 AM\",\"endTime\":\"6:02 PM\"},{\"startTime\":\"8:00 AM\",\"endTime\":\"4:00 PM\"},{\"startTime\":\"Invalid date\",\"endTime\":\"Invalid date\"}]', '2021-09-27 03:59:30', 'TERMINATED'),
-('BD-B7B3A692C81EA', 'Nabeel Kun', '3122025939', 'nabeel2kkun@gmail.com', 'kun123', 'male', 0, '34J/ Jaffer Street', '', 'React Native', '12345', '[{\"startTime\":\"12:00 AM\",\"endTime\":\"2:00 AM\"},{\"startTime\":\"Invalid date\",\"endTime\":\"Invalid date\"}]', '', 'APPROVED');
+('1', 'sadas', '3122025939', 'nabeelelahi2000@gmail.com', 'i*h^&|6&KR25@421', 'male', 0, '34J/ Jaffer Street', 'SilverTech Solutions', 'React Native', '12345', '[{\"startTime\":\"4:04 AM\",\"endTime\":\"6:02 PM\"},{\"startTime\":\"8:00 AM\",\"endTime\":\"4:00 PM\"},{\"startTime\":\"Invalid date\",\"endTime\":\"Invalid date\"}]', '2021-09-27 03:59:30', 'ACTIVE');
 
 -- --------------------------------------------------------
 
@@ -291,10 +261,7 @@ CREATE TABLE `her` (
 --
 
 INSERT INTO `her` (`id`, `patientId`, `sugar`, `bloodPressure`, `ear`, `eye`, `hRate`, `height`, `skin`, `tempreture`, `weight`) VALUES
-(1, '1', 'A9BEC7BF4144-D200', '120', 'Clean', 'Clean', 'Normal', '59', 'Normal', 'Normal', '60'),
-(4, '-CC31A913CC3F7-7', 'asda', 'qwe', 'zxcz', 'xzczx', 'rtyrt', 'bnbvnm', 'xzczxz', 'wqewqzx', 'check'),
-(5, '-3F267557B9308-6', '200', '120', 'Clean', 'Weak', '200', '5\'7', 'Weak ', '90', '60'),
-(6, 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined');
+(1, '1', 'A9BEC7BF4144-D200', '120', 'Clean', 'Clean', 'Normal', '59', 'Normal', 'Normal', '60');
 
 -- --------------------------------------------------------
 
@@ -372,34 +339,6 @@ CREATE TABLE `notification` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `prescription`
---
-
-CREATE TABLE `prescription` (
-  `id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `appointment_id` varchar(255) NOT NULL,
-  `buyer_id` varchar(255) NOT NULL,
-  `doctor_id` varchar(255) NOT NULL,
-  `created_by` varchar(255) NOT NULL,
-  `created_at` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `prescription`
---
-
-INSERT INTO `prescription` (`id`, `title`, `description`, `appointment_id`, `buyer_id`, `doctor_id`, `created_by`, `created_at`) VALUES
-(7, 'asdasd', 'zxczxczrtytryrhgfhdfgbcvbcvyuiuyui', '15', '-CC31A913CC3F7-7', 'BD-B7B3A692C81EA', 'BD-B7B3A692C81EA', '1649335878779'),
-(8, 'asd', 'asdasdasd', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined'),
-(9, 'asd', 'asdasdasd', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined'),
-(10, 'Goku', 'Goku SSJ 3', '15', '-CC31A913CC3F7-7', 'BD-B7B3A692C81EA', 'BAD-BB8640B5D500', '2022-04-11T20:04:31.853Z'),
-(11, 'title', 'description is description', '2', '-87108256947D-E6', 'as', 'BAD-BB8640B5D500', '2022-04-13T20:33:08.341Z');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `purchased_appointments`
 --
 
@@ -412,36 +351,20 @@ CREATE TABLE `purchased_appointments` (
   `amount` int(11) DEFAULT NULL,
   `discount` int(11) DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
+  `discripton` varchar(255) DEFAULT NULL,
   `date` varchar(255) DEFAULT NULL,
   `time` varchar(255) DEFAULT NULL,
   `created_at` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
-  `buyer_type` varchar(255) DEFAULT NULL,
-  `discription` varchar(255) DEFAULT NULL
+  `buyer_type` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `purchased_appointments`
 --
 
-INSERT INTO `purchased_appointments` (`id`, `buyer_id`, `service_id`, `doctor_id`, `service_name`, `amount`, `discount`, `price`, `date`, `time`, `created_at`, `status`, `buyer_type`, `discription`) VALUES
-(1, '1', '2', '${doctorId}', 'Care Giver Home Visit (15% off for monthly subscribers)', 3500, 15, 5000, '30/2/15', '8 AM', '1234334234234', 'APPROVED', 'sponser', NULL),
-(2, '-87108256947D-E6', '1', 'as', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'as', 'as', '1646941084964', 'COMPLETED', 'sponsor', NULL),
-(3, '-1B25D696A239D-1', '1', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'asdasd', 'ASASDasd', '1648318170397', 'SCHEDULED', 'guest', NULL),
-(4, '-1B25D696A239D-1', '1', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'asdasd', 'ASASDasd', '1648318345910', 'COMPLETED', 'guest', NULL),
-(5, 'undefined', '1', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, '2022-04-05', '1:02 AM', '1648329583965', 'SCHEDULED', 'undefined', NULL),
-(6, 'undefined', 'undefined', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'asdsada', 'asd', '1648412330899', 'PENDING', 'undefined', NULL),
-(7, '-CC31A913CC3F7-7', 'undefined', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'ayrtyr', 'zxczxc', '1648412723851', 'SCHEDULED', 'sponsor', NULL),
-(8, '-3F267557B9308-6', '1', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'dasdasd', 'dsadasd', '1648501627394', 'PENDING', 'beneficiary', 'asdasdasdasd'),
-(9, '-87108256947D-E6', 'undefined', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, '4/4/2022', '5 pm', '1648899353452', 'PENDING', 'sponsor', 'Nabeel Elahi'),
-(10, '-87108256947D-E6', 'undefined', '', 'Care Giver Home Visit (15% off for monthly subscribers)', 2975, 15, 3500, '7/5/20200', '5 pm', '1648912185210', 'SCHEDULED', 'sponsor', 'This is for testing purpose'),
-(11, '-87108256947D-E6', 'undefined', '', 'Care Giver Home Visit (15% off for monthly subscribers)', 2975, 15, 3500, '4/2/2020', '5 pm', '1648912689612', 'PENDING', 'sponsor', 'Test appointment request'),
-(12, '-87108256947D-E6', 'undefined', '', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'asd', 'asd', '1649281387274', 'PENDING', 'sponsor', 'asdasdasdasdas'),
-(13, '-87108256947D-E6', 'undefined', '1', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'undefined', 'undefined', '1649281644727', 'SCHEDULED', 'sponsor', 'asdasdasdasdas'),
-(14, '-87108256947D-E6', '1', '1', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'undefined', 'undefined', '1649282388119', 'SCHEDULED', 'sponsor', 'xvzxczxcuyiyuiyuityghjghjjhklvbn'),
-(15, '-CC31A913CC3F7-7', '1', 'BD-B7B3A692C81EA', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 5950, 15, 7000, 'dasdasd', 'asdasas', '1649328415055', 'COMPLETED', 'sponsor', 'asdsadqweqwreetertyrtyutrvxczxcbvn'),
-(16, '-CC31A913CC3F7-7', '2', 'BD-B7B3A692C81EA', 'Care Giver Home Visit (15% off for monthly subscribers)', 2975, 15, 3500, 'hamza', 'hamza', '1649357229873', 'PENDING', 'sponsor', 'hamza to hamza'),
-(17, '-3F267557B9308-6', '4', '', 'Managing  Coordination & Security During 3rd Party Health Services', 4250, 15, 5000, 'asd', 'muhid', '1649357316309', 'PENDING', 'beneficiary', 'hamza for muhid');
+INSERT INTO `purchased_appointments` (`id`, `buyer_id`, `service_id`, `doctor_id`, `service_name`, `amount`, `discount`, `price`, `discripton`, `date`, `time`, `created_at`, `status`, `buyer_type`) VALUES
+(1, '1', '2', '${doctorId}', 'Care Giver Home Visit (15% off for monthly subscribers)', 3500, 15, 5000, 'Aji discription hai ji', '30/2/15', '8 AM', '1234334234234', 'APPROVED', 'sponser');
 
 -- --------------------------------------------------------
 
@@ -470,8 +393,7 @@ CREATE TABLE `purchased_labtests` (
 --
 
 INSERT INTO `purchased_labtests` (`id`, `buyer_id`, `service_id`, `service_name`, `amount`, `discount`, `price`, `discription`, `date`, `time`, `created_at`, `status`, `buyer_type`) VALUES
-(1, '1', '2', 'Care Giver Home Visit (15% off for monthly subscribers)', 3500, 15, 5000, 'Aji discription hai ji', '30/2/15', '8 AM', '1234334234234', 'SCHEDULED', 'sponser'),
-(2, '-CC31A913CC3F7-7', '2', 'Care Giver Home Visit (15% off for monthly subscribers)', 2975, 15, 3500, 'Nabeel ko lab test karwana hai', '12/12/12', '12pm', '1649878416609', 'COMPLETED', 'sponsor');
+(1, '1', '2', 'Care Giver Home Visit (15% off for monthly subscribers)', 3500, 15, 5000, 'Aji discription hai ji', '30/2/15', '8 AM', '1234334234234', 'APPROVED', 'sponser');
 
 -- --------------------------------------------------------
 
@@ -490,18 +412,15 @@ CREATE TABLE `purchased_medicines` (
   `discription` varchar(255) DEFAULT NULL,
   `created_at` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
-  `buyer_type` varchar(255) DEFAULT NULL,
-  `date` varchar(255) DEFAULT NULL,
-  `time` varchar(255) DEFAULT NULL
+  `buyer_type` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `purchased_medicines`
 --
 
-INSERT INTO `purchased_medicines` (`id`, `buyer_id`, `service_id`, `service_name`, `amount`, `discount`, `price`, `discription`, `created_at`, `status`, `buyer_type`, `date`, `time`) VALUES
-(1, '1', '2', 'Care Giver Home Visit (15% off for monthly subscribers)', 3500, 15, 5000, 'Aji discription hai ji', '1234334234234', 'PENDING', 'sponser', NULL, NULL),
-(2, '-CC31A913CC3F7-7', '6', 'Managing  Coordination & Security During 3rd Party Health Services', 1500, 0, 1500, 'Nabeel ko medicine chahiye', '1649878500983', 'COMPLETED', 'sponsor', '20/12/12', '5 am');
+INSERT INTO `purchased_medicines` (`id`, `buyer_id`, `service_id`, `service_name`, `amount`, `discount`, `price`, `discription`, `created_at`, `status`, `buyer_type`) VALUES
+(1, '1', '2', 'Care Giver Home Visit (15% off for monthly subscribers)', 3500, 15, 5000, 'Aji discription hai ji', '1234334234234', 'PENDING', 'sponser');
 
 -- --------------------------------------------------------
 
@@ -529,11 +448,11 @@ INSERT INTO `service` (`id`, `title`, `description`, `discount`, `price`, `type`
 ('1', 'BRIDGE Dr. Home Visit for Entire Family (Non-Covid patients)\r\n(15% off FOR monthly subscribers)', 'Our qualified Family Physicians and Consultants perform a comprehensive evaluation of patients and also provide a treatment plan to meet their health care needs at your doorstep.', 15, 7000, 'ON_DEMAND', 'Appointment', '', ''),
 ('10', 'Attendant / Nursing Services', 'Different services charges of Attendant/Nursing\r\n(12 TO 24 hours shifts Initially only IN Karachi) ON per MONTH basis', NULL, 42, 'SUBSCRIPTION', '', '', ''),
 ('11', 'Monthly  Subscription', 'A monthly plan subscription that\'s  right for you and your family\r\nHome healthcare especially for Elderlies provides a high-quality affordable healthcare management \r\neffect within the comfort of your home.\r\nBRIDGE aims to provide convenience to such members of your family who find it difficult to travel \r\nor visit healthcare centers. Our highly skilled and experienced team will provide care with \r\ncompassion at your doorstep.\r\n\r\nBRIDGE Services  includes.\r\n\r\nOur skilled and experienced Care Coordinators will visit to perform on-spot procedures.\r\nWe ensure to maintain continuity of medical care for your elderlies who have special healthcare \r\nneeds.\r\n\r\nThe procedure includes.\r\n\r\na) Examination of body vitals like\r\n  \r\n  1. Blood Pressure\r\n  2. Blood Sugar\r\n  3. Oxygen Saturation\r\n  4. Heart Rate\r\n  5. Weight (Body Mass Index)\r\n  6. Height\r\n  7. Skin, Nails, Eye examination\r\n\r\nb) Creation of Electronic medical records & medicine taking history\r\nc) On spot Tele consultation with BRIDGE Licensed Doctors\r\nd) Provide 24/7 availability of a licensed female physician to assist you\r\ne) Every week, our BRIDGE licensed Doctor will call the family for an update\r\nf) Daily Medicine intake reminder (optional)\r\ng) Free home laboratory sample collection (Laboratory charges not included)\r\nh) Free medicine delivery at your home from our partner pharmacy for a minimum order of PKR 1000/= Doctor\'s appointment - Arrange doctor\'s appointment as per your family request\r\n\r\nThis package also includes the following lab tests for any two members of your family, at the time \r\nof registration\r\n1. Complete blood count (CBC)\r\n2. Liver function Test (LFT)\r\n3. Thyroid-stimulating hormone\r\n4. Lipid Profile\r\n5. Blood Glucose (fasting)\r\n6. Urine DR.\r\n\r\nFree Screening also includes:\r\n\r\nHepatitis B&C, Typhoid, Malaria, H-pylori, Cholestrol, Blood Hb, UricAcid, Dengue, (igG/igM & Antigen-NS1) \r\n\r\n\r\nIntroductory  offer\r\nFor your entire Family*\r\n\r\nEvery Month:         PKR  5000/-\r\nRegistration Fee: PKR 5000/- (non-refundable)\r\n\r\n* Maximum 5 members at the same location.\r\n* Subscription charges to be paid on 3 months basis.', NULL, 15000, 'SUBSCRIPTION', '', '', ''),
-('2', 'Care Giver Home Visit (15% off for monthly subscribers)', 'Care Coordinators TO look after your loved ones WHEN you are away! Service for your family   \nincludes :\n\n 1. Home visit by our Care coordinator for assessments & examination of body vitals\n  a) Blood Sugar\n  b) Blood Pressure\n  c) Oxygen Saturation\n  d) Heart rate\n  e) Weight (Body Mass index)\n  f) Height\n  g) Skin, Nails, AND Eye examination\n 2. Creation of medical record & medical history\n 3. Tele consultation WITH BRIDGE Licensed Doctor\n', 15, 3500, 'ON_DEMAND', 'Labtest', '', ''),
+('2', 'Care Giver Home Visit (15% off for monthly subscribers)', 'Care Coordinators TO look after your loved ones WHEN you are away! Service for your family   \nincludes :\n\n 1. Home visit by our Care coordinator for assessments & examination of body vitals\n  a) Blood Sugar\n  b) Blood Pressure\n  c) Oxygen Saturation\n  d) Heart rate\n  e) Weight (Body Mass index)\n  f) Height\n  g) Skin, Nails, AND Eye examination\n 2. Creation of medical record & medical history\n 3. Tele consultation WITH BRIDGE Licensed Doctor\n', 15, 3500, 'ON_DEMAND', 'Appointment', '', ''),
 ('3', '\"Outdoor Help Services\" through our Care Manager \r\n*(15% off FOR monthly subscribers)\r\n*(charges FOR transport TO be billed AS per actual)', 'when your loved ones suffer from a medical condition, watching them struggle to perform their daily \r\nactivities can be overwhelming. while you wish TO support them IN every step of their life, your \r\nschedule gives you NO time, which leaves you feeling helpless.\r\n\r\nOur team of trained professionals cares coordinators will take care of your elderly AND loved ones \r\nFOR their needs\r\n\r\nin providing personal assistance during visit TO places LIKE*\r\n a) Clinic\r\n b) Hospital\r\n c) Laboratory\r\n d) NADRA, passport office, pension, AND bank, etc.\r\n e) Grocery OR shopping OR ANY other outdoor personal works\r\n\r\n*(During the entire visit our care coordinator will be WITH the elderly helping them WITH ALL the \r\npaperwork OR moving around)', 15, 2500, 'ON_DEMAND', 'Appointment', '', ''),
 ('4', 'Managing  Coordination & Security During 3rd Party Health Services', 'BRIDGE charges for arranging the following services at home\r\n\r\n a) Physiotherapist\r\n b) Nursing\r\n c) Pathology\r\n d) Radiology\r\n\r\n*(The cost of the above services shall be depending upon choice by the sponsor or beneficiary on different options at the time of booking)\r\n\r\nCharges against services by BRIDGE will ensure the timely arrival of the service provider.\r\n \r\n 1. Manage appointment and coordination for arrival.\r\n 2. Be physically present to receive the service provider\r\n 3. Be present during the entire activity for security and safety.\r\n 4. Update Sponsor on the event, with photos and voice messages', 15, 5000, 'ON_DEMAND', 'Appointment', '', ''),
 ('5', 'Managing  Coordination & Security During 3rd Party Health Services', 'Services charges of ultrasound AT home (Initially only IN Karachi)', NULL, 2200, 'ON_DEMAND', '', '', ''),
-('6', 'Managing  Coordination & Security During 3rd Party Health Services', 'Services charges of ECG at home (Initially only in Karachi)', NULL, 1500, 'ON_DEMAND', 'Medication', '', ''),
+('6', 'Managing  Coordination & Security During 3rd Party Health Services', 'Services charges of ECG at home (Initially only in Karachi)', NULL, 1500, 'ON_DEMAND', '', '', ''),
 ('7', 'Managing  Coordination & Security During 3rd Party Health Services', 'Services charges of Chest X-ray AT home (Initially only IN Karachi)', NULL, 8000, 'ON_DEMAND', '', '', ''),
 ('8', 'Managing  Coordination & Security During 3rd Party Health Services', 'Services charges of physiotherapy at home (Initially only in Karachi) per session', NULL, 1300, 'ON_DEMAND', '', '', ''),
 ('9', 'Blood Test', ' \r\n 1. Complete Blood COUNT (CBC)\r\n 2. Liver FUNCTION Test (LFT) \r\n 3. Thyroid FUNCTION Test\r\n 4. Lipid Profile\r\n 5. Blood Glucose Fasting\r\n 6. Urine DR.', NULL, 4500, 'ON_DEMAND', '', '', '');
@@ -599,9 +518,8 @@ CREATE TABLE `sponsor` (
 --
 
 INSERT INTO `sponsor` (`id`, `name`, `email`, `age`, `password`, `phone`, `cnic`, `marital_status`, `frequent_call_allowed`, `blood_group`, `preferred_way_of_contact`, `gender`, `primary_address`, `secondary_address`, `city`, `state`, `postal_code`, `case_study`, `created_at`, `status`, `easypaisa_number`, `jazzcash_number`, `bank`, `card`, `assigned_doctorId`) VALUES
-('-87108256947D-E6', 'Nabeel', 'nabeel2kkun@gmail.com', 'undefined', 'nabeel123', 'undefined', 0, 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 0, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '', 'PENDING', '', '', '', '', '1'),
-('-CA9BEC7BF4144-D', 'Wea', 'nabeelelahi2000@gmail.com', '121', '@~`[51J317c%F)Bn', '12112121', 2147483647, 'asdasasdas', 'asdasd', 'asdas', 'asdas', 'asdasdasd', 'asdasd', 'asdasd', 'asdas', 'asdasd', 0, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '', 'PENDING', '', '', '', '', NULL),
-('-CC31A913CC3F7-7', 'Hamza', 'hamzadon.1981@gmail.com', '19', 'don123', '03182090644', 2147483647, 'Single', '2', 'O+', 'Email', 'Male', '9/128 Liaquataad Karachi', '9/128 Liaquataad Karachi', 'Karachi', 'Pakistan', 74600, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '', 'APPROVED', '', '', '', '', 'BD-B7B3A692C81EA');
+('-87108256947D-E6', 'Nabeel', 'nabeel2kkun@gmail.com', 'undefined', 'nabeel123', 'undefined', 0, 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 'undefined', 0, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '', 'APPROVED', '', '', '', '', '1'),
+('-CA9BEC7BF4144-D', 'Wea', 'nabeelelahi2000@gmail.com', '121', '@~`[51J317c%F)Bn', '12112121', 2147483647, 'asdasasdas', 'asdasd', 'asdas', 'asdas', 'asdasdasd', 'asdasd', 'asdasd', 'asdas', 'asdasd', 0, '`\"{allergy: {has_allergy: false, allergy_description: \'\'},\\nany_medicine_authorization: false,\\nassigned_doctor: \\\"\\\",\\ncare_giver_id: \\\"\\\",\\nexercise_regularly: {does_regularly: false, exercise_description: \'\'},\\noccupation: \\\"\\\",\\nsmoking: false,\\nspecial_diet: {takes_special_diet: false, special_diet_description: \'\'},\\nvaccination_history: []}\"`', '', 'APPROVED', '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -655,12 +573,6 @@ ALTER TABLE `calling_agent`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `comobordites`
---
-ALTER TABLE `comobordites`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `doctor`
 --
 ALTER TABLE `doctor`
@@ -700,12 +612,6 @@ ALTER TABLE `name`
 -- Indexes for table `notification`
 --
 ALTER TABLE `notification`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `prescription`
---
-ALTER TABLE `prescription`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -749,16 +655,10 @@ ALTER TABLE `sponsor_profile_requests`
 --
 
 --
--- AUTO_INCREMENT for table `comobordites`
---
-ALTER TABLE `comobordites`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT for table `her`
 --
 ALTER TABLE `her`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `my_patient`
@@ -773,28 +673,22 @@ ALTER TABLE `name`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `prescription`
---
-ALTER TABLE `prescription`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
 -- AUTO_INCREMENT for table `purchased_appointments`
 --
 ALTER TABLE `purchased_appointments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `purchased_labtests`
 --
 ALTER TABLE `purchased_labtests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `purchased_medicines`
 --
 ALTER TABLE `purchased_medicines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

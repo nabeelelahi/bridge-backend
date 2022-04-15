@@ -144,150 +144,57 @@ const getAllCallingAgent = (req, res) => {
   return res;
 };
 
-const terminateSponsor = (req, res) => {
-  const { sid } = req.params;
+const updateUserStatus = (req, res) => {
 
-  sql.customQuery(
-    `UPDATE sponsor
-     SET status = 'TERMINATED'
-     WHERE sid = '${sid}'`,
-    (result, isError) => {
-      if (!isError) {
-        console.log("sponser updated");
-        sql.customQuery(
-          `UPDATE beneficiary
-           SET status = 'TERMINATED'
-           WHERE sid = '${sid}'`,
-          (benResult, benError) => {
-            if (!benError) {
-              console.log("beneficiary updated");
-              res.json({
-                success: true,
-                message: "Sponsor and it's beneficiaries has been terminated",
-              });
-            } else {
-              res.json({ success: false, error: result });
+  const { id, userType, status } = req.params;
+
+  if (userType === 'sponsor') {
+    sql.customQuery(
+      `UPDATE ${userType}
+       SET status = '${status}'
+       WHERE id = '${id}'`,
+      (result, isError) => {
+        if (!isError) {
+          console.log("sponser updated");
+          sql.customQuery(
+            `UPDATE beneficiary
+             SET status = '${status}'
+             WHERE sponsor_id = '${id}'`,
+            (benResult, benError) => {
+              if (!benError) {
+                console.log("beneficiary updated");
+                res.json({
+                  success: true,
+                  message: "Sponsor and it's beneficiaries has been updated",
+                });
+              } else {
+                res.json({ success: false, error: result });
+              }
             }
-          }
-        );
-      } else {
-        res.json({ success: false, error: result });
+          );
+        } else {
+          res.json({ success: false, error: result });
+        }
       }
-    }
-  );
-
-  return res;
-};
-
-const terminateDoctor = (req, res) => {
-  const { did } = req.params;
-
-  sql.customQuery(
-    `UPDATE doctor
-    SET status = 'TERMINATED'
-    WHERE did = '${did}'`,
-    (result, isError) => {
-      if (!isError) {
-        res.json({ success: true, message: result });
-      } else {
-        res.json({ success: false, error: result });
+    );
+  }
+  else {
+    sql.customQuery(
+      `UPDATE ${userType}
+       SET status = '${status}'
+       WHERE id = '${id}'`,
+      (result, isError) => {
+        if (!isError) {
+          res.json({
+            success: true,
+            message: `${userType} has been updated`,
+          });
+        } else {
+          res.json({ success: false, error: result });
+        }
       }
-    }
-  );
-
-  return res;
-};
-
-const terminateCallingAgent = (req, res) => {
-  const { caid } = req.params;
-
-  sql.customQuery(
-    `UPDATE calling_agent 
-    SET status = "TERMINATED" 
-    WHERE caid = '${caid}'`,
-    (result, isError) => {
-      if (!isError) {
-        res.json({ success: true, message: result });
-      } else {
-        res.json({ success: false, error: result });
-      }
-    }
-  );
-
-  return res;
-};
-
-const activateSponsor = (req, res) => {
-
-  const { sid } = req.params;
-
-  sql.customQuery(
-    `UPDATE sponsor
-     SET status = 'APPROVED'
-     WHERE id = '${sid}'`,
-    (result, isError) => {
-      if (!isError) {
-        // console.log("sponser updated");
-        // res.json({ success: true, message: "sponsor profile activate successfully" });
-        sql.customQuery(
-          `UPDATE beneficiary
-           SET status = 'APPROVED'
-           WHERE sponsor_id = '${sid}'`,
-          (benResult, benError) => {
-            if (!benError) {
-              console.log("beneficiary updated");
-              res.json({
-                success: true,
-                message: "Sponsor and it's beneficiaries has been activated",
-              });
-            } else {
-              res.json({ success: false, error: result });
-            }
-          }
-        );
-      } else {
-        res.json({ success: false, error: result });
-      }
-    }
-  );
-
-  return res;
-};
-
-const activateDoctor = (req, res) => {
-  const { did } = req.params;
-
-  sql.customQuery(
-    `UPDATE doctor
-    SET status = 'ACTIVE'
-    WHERE did = '${did}'`,
-    (result, isError) => {
-      if (!isError) {
-        res.json({ success: true, message: result });
-      } else {
-        res.json({ success: false, error: result });
-      }
-    }
-  );
-
-  return res;
-};
-
-const activateCallingAgent = (req, res) => {
-  const { caid } = req.params;
-
-  sql.customQuery(
-    `UPDATE calling_agent 
-    SET status = "ACTIVE" 
-    WHERE caid = '${caid}'`,
-    (result, isError) => {
-      if (!isError) {
-        res.json({ success: true, message: result });
-      } else {
-        res.json({ success: false, error: result });
-      }
-    }
-  );
+    );
+  }
 
   return res;
 };
@@ -299,40 +206,26 @@ const acceptSponsorProfileRequest = (req, res) => {
     (result, isError) => {
       const password = pw(16);
       if (!isError && result?.length) {
-        // mail("profile-creation-sponsor", { email, password })
-          // .then((isEmailSent) => {
-            // console.log(isEmailSent, "Email Sent Response");
-            // console.log(result, "Email Sent Response");
-            // if (isEmailSent === 'success') {
-              sql.customQuery(
-                `UPDATE sponsor SET status = 'APPROVED', password = '${password}', assigned_doctorId = '${assigned_doctorId}' WHERE id = '${result[0].id}'`,
-                (result, isError) => {
-                  if (!isError) {
-                    // sql.customQuery(
-                    //   `DELETE FROM sponsor_profile_requests
-                    //    WHERE email = '${email}' AND status = 'PENDING_ADMIN_APPROVAL'`,
-                    //   (result, isError) => {
-                    //     if (!isError) {
-                    //       res.json({
-                    //         success: true,
-                    //         message: `sponsor profile accepted successfully and email has been sent to ${email}`
-                    //       })
-                    //     } else {
-                    //       res.json({ success: false, error: result })
-                    //     }
-                    //   }
-                    // )
-                    res.json({ success: true, data: result[0] });
-                  } else {
-                    res.json({ success: false, error: result });
-                  }
-                }
-              );
-            // } else {
-            //   res.json({ success: false, error: "email sent failed" });
-            // }
-          // })
-          // .catch((err) => console.log(err));
+        mail("profile-creation-sponsor", { email, password })
+        .then((isEmailSent) => {
+        console.log(isEmailSent, "Email Sent Response");
+        console.log(result, "Email Sent Response");
+        if (isEmailSent === 'success') {
+        sql.customQuery(
+          `UPDATE sponsor SET status = 'APPROVED', password = '${password}', assigned_doctorId = '${assigned_doctorId}' WHERE id = '${result[0].id}'`,
+          (result, isError) => {
+            if (!isError) {
+              res.json({ success: true, data: result[0] });
+            } else {
+              res.json({ success: false, error: result });
+            }
+          }
+        );
+        } else {
+          res.json({ success: false, error: "email sent failed" });
+        }
+        })
+        .catch((err) => console.log(err));
       } else {
         res.json({ success: false, error: result });
       }
@@ -440,27 +333,27 @@ const createDoctorProfile = (req, res) => {
       if (!isError && !result?.length) {
         // mail("profile-creation-callingAgent", { email, password }).then(
         //   (isEmailSent) => {
-            // if (isEmailSent) {
-              sql.customQuery(
-                `INSERT INTO doctor (id, name, email, password, phone, gender, address, working_hours, speciality, pmdc_number, status)
+        // if (isEmailSent) {
+        sql.customQuery(
+          `INSERT INTO doctor (id, name, email, password, phone, gender, address, working_hours, speciality, pmdc_number, status)
              VALUES ('${uid(
-                  16,
-                  "BD-"
-                )}', '${name}', '${email}', '${password}', '${phone}', '${gender}', '${address}', '${JSON.stringify(
-                  availability
-                )}', '${speciality}', '${pmdcNumber}', 'ACCEPTED')`,
-                (result, isError) => {
-                  if (!isError) {
-                    res.json({
-                      success: true,
-                      message: `doctor profile created successfully and email has been sent to ${email}`,
-                    });
-                  } else {
-                    res.json({ success: false, error: result });
-                  }
-                }
-              );
-            // }
+            16,
+            "BD-"
+          )}', '${name}', '${email}', '${password}', '${phone}', '${gender}', '${address}', '${JSON.stringify(
+            availability
+          )}', '${speciality}', '${pmdcNumber}', 'ACCEPTED')`,
+          (result, isError) => {
+            if (!isError) {
+              res.json({
+                success: true,
+                message: `doctor profile created successfully and email has been sent to ${email}`,
+              });
+            } else {
+              res.json({ success: false, error: result });
+            }
+          }
+        );
+        // }
         //   }
         // );
       } else if (!isError && result?.length) {
@@ -515,13 +408,8 @@ module.exports = {
   getAllSponsor,
   getAllDoctor,
   getAllCallingAgent,
-  terminateSponsor,
-  terminateDoctor,
-  terminateCallingAgent,
   getAllBeneficiaries,
-  activateCallingAgent,
-  activateDoctor,
-  activateSponsor,
+  updateUserStatus,
   getOrders
 };
 
