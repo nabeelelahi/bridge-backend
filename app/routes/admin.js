@@ -14,7 +14,10 @@ const {
   getAllGuests,
   updateUserStatus,
   getAllBeneficiaries,
-  getOrders
+  getOrders,
+  updateCallingAgentProfile,
+  updateDoctorProfile,
+  reAssignDoctor
 } = require('../controllers').admin
 
 router.get(`${DEV_BASEURL}/admin/GET/all-guests`, getAllGuests)
@@ -42,6 +45,12 @@ router.post(`${DEV_BASEURL}/admin/POST/create/new/doctor`, createDoctorProfile)
 router.put(`${DEV_BASEURL}/admin/PUT/update-user-status/:userType/:status/:id`, updateUserStatus)
 
 router.get(`${DEV_BASEURL}/admin/GET/get-orders/:categoryType`, getOrders)
+
+router.put(`${DEV_BASEURL}/admin/PUT/create/calling-agent`, updateCallingAgentProfile)
+
+router.put(`${DEV_BASEURL}/admin/PUT/create/doctor`, updateDoctorProfile)
+
+router.put(`${DEV_BASEURL}/admin/PUT/re-assign/doctor`, reAssignDoctor)
 
 // router.post(`/${BASE_URL}/POST/admin/account/password/reset/link`, generateResetAdminPasswordLink)
 

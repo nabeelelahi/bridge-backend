@@ -79,7 +79,7 @@ const getAllGuests = (req, res) => {
 
 const getAllSponsor = (req, res) => {
   sql.customQuery(
-    `SELECT id, name, email, phone, cnic, status, created_at FROM sponsor WHERE status != 'PENDING'`,
+    `SELECT id, assigned_doctorId, name, email, phone, cnic, status, created_at FROM sponsor WHERE status != 'PENDING'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, sponsors: result });
@@ -95,7 +95,7 @@ const getAllSponsor = (req, res) => {
 
 const getAllBeneficiaries = (req, res) => {
   sql.customQuery(
-    `SELECT id, name, email, phone, cnic, age, gender, sponsor_id, status FROM beneficiary`,
+    `SELECT id, assigned_doctorId, name, email, phone, cnic, age, gender, sponsor_id, status FROM beneficiary`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, beneficiaries: result });
@@ -199,6 +199,42 @@ const updateUserStatus = (req, res) => {
   return res;
 };
 
+const reAssignDoctor = (req, res) => {
+
+  const { id, assigned_doctorId } = req.body;
+
+    sql.customQuery(
+      `UPDATE sponsor
+       SET assigned_doctorId = '${assigned_doctorId}'
+       WHERE id = '${id}'`,
+      (result, isError) => {
+        if (!isError) {
+          console.log("sponser updated");
+          sql.customQuery(
+            `UPDATE beneficiary
+             SET assigned_doctorId = '${assigned_doctorId}'
+             WHERE sponsor_id = '${id}'`,
+            (benResult, benError) => {
+              if (!benError) {
+                console.log("beneficiary updated");
+                res.json({
+                  success: true,
+                  message: "Sponsor and it's beneficiaries has been updated",
+                });
+              } else {
+                res.json({ success: false, error: result });
+              }
+            }
+          );
+        } else {
+          res.json({ success: false, error: result });
+        }
+      }
+    )
+
+  return res;
+};
+
 const acceptSponsorProfileRequest = (req, res) => {
   const { email, id, assigned_doctorId } = req.body;
   sql.customQuery(
@@ -207,25 +243,25 @@ const acceptSponsorProfileRequest = (req, res) => {
       const password = pw(16);
       if (!isError && result?.length) {
         mail("profile-creation-sponsor", { email, password })
-        .then((isEmailSent) => {
-        console.log(isEmailSent, "Email Sent Response");
-        console.log(result, "Email Sent Response");
-        if (isEmailSent === 'success') {
-        sql.customQuery(
-          `UPDATE sponsor SET status = 'APPROVED', password = '${password}', assigned_doctorId = '${assigned_doctorId}' WHERE id = '${result[0].id}'`,
-          (result, isError) => {
-            if (!isError) {
-              res.json({ success: true, data: result[0] });
+          .then((isEmailSent) => {
+            console.log(isEmailSent, "Email Sent Response");
+            console.log(result, "Email Sent Response");
+            if (isEmailSent === 'success') {
+              sql.customQuery(
+                `UPDATE sponsor SET status = 'APPROVED', password = '${password}', assigned_doctorId = '${assigned_doctorId}' WHERE id = '${result[0].id}'`,
+                (result, isError) => {
+                  if (!isError) {
+                    res.json({ success: true, data: result[0] });
+                  } else {
+                    res.json({ success: false, error: result });
+                  }
+                }
+              );
             } else {
-              res.json({ success: false, error: result });
+              res.json({ success: false, error: "email sent failed" });
             }
-          }
-        );
-        } else {
-          res.json({ success: false, error: "email sent failed" });
-        }
-        })
-        .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
       } else {
         res.json({ success: false, error: result });
       }
@@ -266,6 +302,7 @@ const createCallingAgentProfile = (req, res) => {
     qualification,
     salary,
     shiftTiming,
+    created_at
   } = req.body;
 
   const password = pw(16);
@@ -275,13 +312,13 @@ const createCallingAgentProfile = (req, res) => {
     (result, isError) => {
       if (!isError && !result?.length) {
         sql.customQuery(
-          `INSERT INTO calling_agent (caid,name,email,password,phone,cnic,gender,qualification,salary,shiftTiming,status)
+          `INSERT INTO calling_agent (id,name,email,password,phone,cnic,gender,qualification,salary,shift_timing,status, created_at)
          VALUES ('${uid(
             16,
             "BAD-"
           )}', '${name}', '${email}', '${password}', '${phone}', '${cnic}', '${gender}', '${qualification}', '${salary}', '${JSON.stringify(
             shiftTiming
-          )}', 'ACCEPTED')`,
+          )}', 'APPROVED', '${created_at}')`,
           (result, isError) => {
             if (!isError) {
               mail("profile-creation-callingAgent", { email, password }).then(
@@ -316,13 +353,14 @@ const createDoctorProfile = (req, res) => {
   const {
     address,
     speciality,
-    clinicName,
     email,
     gender,
     name,
     phone,
     pmdcNumber,
     availability,
+    cnic,
+    created_at
   } = req.body;
 
   const password = pw(16);
@@ -331,17 +369,17 @@ const createDoctorProfile = (req, res) => {
     `SELECT * FROM doctor WHERE email = '${email}'`,
     (result, isError) => {
       if (!isError && !result?.length) {
-        // mail("profile-creation-callingAgent", { email, password }).then(
-        //   (isEmailSent) => {
-        // if (isEmailSent) {
+        mail("profile-creation-callingAgent", { email, password }).then(
+          (isEmailSent) => {
+        if (isEmailSent) {
         sql.customQuery(
-          `INSERT INTO doctor (id, name, email, password, phone, gender, address, working_hours, speciality, pmdc_number, status)
+          `INSERT INTO doctor (id, name, email, password, phone, gender, cnic, address, working_hours, speciality, pmdc_number, status, created_at)
              VALUES ('${uid(
             16,
             "BD-"
-          )}', '${name}', '${email}', '${password}', '${phone}', '${gender}', '${address}', '${JSON.stringify(
+          )}', '${name}', '${email}', '${password}', '${phone}', '${gender}', '${cnic}', '${address}', '${JSON.stringify(
             availability
-          )}', '${speciality}', '${pmdcNumber}', 'ACCEPTED')`,
+          )}', '${speciality}', '${pmdcNumber}', 'APPROVED', '${created_at}')`,
           (result, isError) => {
             if (!isError) {
               res.json({
@@ -353,13 +391,95 @@ const createDoctorProfile = (req, res) => {
             }
           }
         );
-        // }
-        //   }
-        // );
+        }
+          }
+        );
       } else if (!isError && result?.length) {
         res.json({
           success: false,
           message: "that provided email already belongs to an identity!",
+        });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+
+  return res;
+};
+
+const updateCallingAgentProfile = (req, res) => {
+  
+  const {
+    name,
+    email,
+    phone,
+    cnic,
+    gender,
+    qualification,
+    salary,
+    shiftTiming,
+  } = req.body;
+
+  const query = `UPDATE calling_agent SET 
+  name = '${name}',
+  phone = '${phone}',
+  cnic = '${cnic}',
+  qualification = '${qualification}',
+  salary = '${salary}',
+  gender = '${gender}',
+  shift_timing = '${shiftTiming}'
+  WHERE email = '${email}'`
+
+  sql.customQuery(
+    query,
+    (result, isError) => {
+      if (!isError) {
+        res.json({
+          success: true,
+          message: `calling agent profile updated successfully and email has been sent to ${email}`,
+        });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+
+  return res;
+};
+
+const updateDoctorProfile = (req, res) => {
+  
+  const {
+    address,
+    speciality,
+    email,
+    gender,
+    name,
+    phone,
+    pmdcNumber,
+    availability,
+    cnic,
+  } = req.body;
+
+  const query = `UPDATE doctor SET 
+  name = '${name}',
+  phone = '${phone}',
+  address = '${address}',
+  cnic = '${cnic}',
+  speciality = '${speciality}',
+  gender = '${gender}',
+  pmdc_number = '${pmdcNumber}',
+  working_hours = '${availability}'
+  WHERE email = '${email}'`
+
+  sql.customQuery(
+    query,
+    (result, isError) => {
+      if (!isError) {
+        res.json({
+          success: true,
+          message: `doctor profile updated successfully and email has been sent to ${email}`,
         });
       } else {
         res.json({ success: false, error: result });
@@ -410,7 +530,10 @@ module.exports = {
   getAllCallingAgent,
   getAllBeneficiaries,
   updateUserStatus,
-  getOrders
+  updateCallingAgentProfile,
+  updateDoctorProfile,
+  getOrders,
+  reAssignDoctor
 };
 
 // Calling Agent
