@@ -23,7 +23,7 @@ const requestForProfile = (req, res) => {
   } = req.body;
   console.log(req.body);
   sql.customQuery(
-    `SELECT name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, primary_address, secondary_address, city, state, postal_code, gender, status FROM sponsor WHERE name = '${name}' OR email = '${email}' OR phone = '${phone}'`,
+    `SELECT name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, primary_address, secondary_address, city, state, postal_code, gender, status FROM sponsor WHERE OR email = '${email}' OR phone = '${phone}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({
@@ -93,7 +93,7 @@ const beneficiaries = (req, res) => {
   const { sponserId } = req.params;
 
   sql.customQuery(
-    `SELECT id, name, email, phone, cnic, sponsor_id FROM beneficiary WHERE sponsor_id = '${sponserId}'`,
+    `SELECT id, name, email, phone, age, gender, cnic, marital_status, preferred_way_of_contact, sponsor_id FROM beneficiary WHERE sponsor_id = '${sponserId}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, beneficiaries: result });

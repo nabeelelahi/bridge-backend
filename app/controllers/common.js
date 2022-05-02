@@ -6,7 +6,14 @@ const pw = require("../helpers/pw");
 // view service
 
 const services = (req, res) => {
-  let getAllServicesQuery = `SELECT * FROM service`;
+  let getAllServicesQuery = `SELECT 	
+  id,	
+  title,	
+  description,	
+  discount,	
+  price,		
+  category_type	
+   FROM service`;
   sql.customQuery(getAllServicesQuery, (result, isError) => {
     if (!isError && result?.length) {
       res.json({ success: true, data: result });
@@ -20,7 +27,14 @@ const services = (req, res) => {
 };
 
 const servicesByType = (req, res) => {
-  let getAllServicesQuery = `SELECT * FROM service WHERE type = '${req.params.type}'`;
+  let getAllServicesQuery = `SELECT 
+  id,	
+  title,	
+  description,	
+  discount,	
+  price,		
+  category_type	
+  FROM service WHERE type = '${req.params.type}'`;
   sql.customQuery(getAllServicesQuery, (result, isError) => {
     if (!isError && result?.length) {
       res.json({ success: true, data: result });
@@ -403,21 +417,67 @@ const getUserStatus = (req, res) => {
   let table;
 
   if (userType === 'doctor') table = 'doctor'
-  else if(userType === 'beneficiary') table = 'beneficiary'
-  else if(userType === 'sponsor') table = 'sponsor'
+  else if (userType === 'beneficiary') table = 'beneficiary'
+  else if (userType === 'sponsor') table = 'sponsor'
 
-    sql.customQuery(
-      `SELECT status FROM ${table} WHERE id='${id}'`,
-      (result, isError) => {
-        if (!isError && result?.length) {
-          res.json({ success: true, data: result[0] })
-        } else if (!isError && !result?.length) {
-          res.json({ success: false, message: "no requests found" })
-        } else {
-          res.json({ success: false, error: result })
-        }
+  sql.customQuery(
+    `SELECT status FROM ${table} WHERE id='${id}'`,
+    (result, isError) => {
+      if (!isError && result?.length) {
+        res.json({ success: true, data: result[0] })
+      } else if (!isError && !result?.length) {
+        res.json({ success: false, message: "no requests found" })
+      } else {
+        res.json({ success: false, error: result })
       }
+    }
+  )
+  return res
+
+}
+
+const changePassword = (req, res) => {
+
+  const { userType, id, oldPassword, newPassword } = req.body
+
+  let table;
+
+  if (userType === 'doctor') table = 'doctor'
+  else if (userType === 'beneficiary') table = 'beneficiary'
+  else if (userType === 'sponsor') table = 'sponsor'
+
+  const updateQuery = `UPDATE ${table}
+  SET password = '${newPassword}'
+  WHERE id='${id}'`
+
+  const getQuery = `SELECT password FROM ${table} WHERE id='${id}' AND password='${oldPassword}'`
+
+  function update() {
+    sql.customQuery(updateQuery, (result, isError) => {
+      if (!isError) {
+        res.json({
+          success: true,
+          message: "Password has been updated",
+        });
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
     )
+  }
+
+  sql.customQuery(
+    getQuery,
+    (result, isError) => {
+      if (!isError && result?.length) {
+        update()
+      } else if (!isError && !result?.length) {
+        res.json({ success: false, message: "Please enter correct password" })
+      } else {
+        res.json({ success: false, error: result })
+      }
+    }
+  )
   return res
 
 }
@@ -434,5 +494,6 @@ module.exports = {
   getCombordites,
   getPrescription,
   getSponsorById,
-  getUserStatus
+  getUserStatus,
+  changePassword
 };

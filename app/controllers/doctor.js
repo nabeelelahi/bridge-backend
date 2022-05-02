@@ -136,7 +136,7 @@ const getPatients = async (req, res) => {
   const { id, userType } = req.params;
 
   sql.customQuery(
-    `SELECT * FROM ${userType} WHERE assigned_doctorId = '${id}'`,
+    `SELECT id, name, email, phone, age, gender, cnic, marital_status, preferred_way_of_contact FROM ${userType} WHERE assigned_doctorId = '${id}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, data: result });

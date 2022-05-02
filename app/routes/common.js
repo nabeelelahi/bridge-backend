@@ -13,7 +13,8 @@ const {
     getCombordites,
     getPrescription,
     getSponsorById,
-    getUserStatus
+    getUserStatus,
+    changePassword
 } = require('../controllers').common
 
 router.get(`${DEV_BASEURL}/common/GET/services`, services)
@@ -39,5 +40,7 @@ router.get(`${DEV_BASEURL}/common/GET/prescription/:appointment_id`, getPrescrip
 router.get(`${DEV_BASEURL}/common/GET/sponsor/:sponsor_id`, getSponsorById)
 
 router.get(`${DEV_BASEURL}/common/GET/status/:userType/:id`, getUserStatus)
+
+router.post(`${DEV_BASEURL}/common/POST/update-password`, changePassword)
 
 module.exports = router
