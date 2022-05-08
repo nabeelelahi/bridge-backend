@@ -235,6 +235,21 @@ const reAssignDoctor = (req, res) => {
   return res;
 };
 
+const acceptSponsorProfileRequest2 = async (req, res) => {
+  const { email, id, assigned_doctorId } = req.body;
+  try {
+    const data = await sql.customQuery(
+      `SELECT id, name, email, phone, cnic, status FROM sponsor WHERE id = '${id}' AND status = 'PENDING'`,
+    );
+    const password = pw(16);
+    const email = await mail("profile-creation-sponsor", { email, password })
+    console.log(email);
+    res.json({ success: true, data: result[0] });
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const acceptSponsorProfileRequest = (req, res) => {
   const { email, id, assigned_doctorId } = req.body;
   sql.customQuery(
