@@ -6,12 +6,16 @@ function creds() {
       user: 'root',
     },
     PROD_dbCreds: {
-      host: 'bridgeconnect.pk',
-      user: 'bridgeco_nabeel',
+      connectionLimit: 1000,
+      connectTimeout: 60 * 60 * 1000,
+      acquireTimeout: 60 * 60 * 1000,
+      timeout: 60 * 60 * 1000,
+      host: '64.31.43.178',
+      user: 'bridgeco_dev_nabeel',
       password: 'Nabeel@2000',
       database: 'bridgeco_bridge_db',
       port: 3306,
-      // debug: false
+      debug: false
     },
 
     mailingCreds: {

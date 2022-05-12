@@ -1,14 +1,17 @@
 const mysql = require('mysql')
 const creds = require('./creds')
 
-const pool = mysql.createPool(creds().PROD_dbCreds)//.connect()
-.once('connection', () => {
-  console.log('CONNECTION HOGAYAAAAAAAA')
-})
-
-// const pool =  mysql.createPool(creds().DEV_dbCreds).once('connection', () => {
-//   console.log('DATABASE CONNECTION ESTABLISHED')
+// const pool = mysql.createPool(creds().PROD_dbCreds)
+ 
+// pool.on('connection', (res) => {
+//   console.log(pool)
 // })
+
+//  console.log(pool)
+
+const pool =  mysql.createPool(creds().PROD_dbCreds).once('connection', () => {
+  console.log('DATABASE CONNECTION ESTABLISHED')
+})
 
 const sql = {
   checkQuery: (tableName, values, cb) => {
