@@ -19,12 +19,13 @@ function creds() {
     },
 
     mailingCreds: {
-      host: 'bridgeconnect.pk',
+      host: 'mail.bridgeconnect.pk',
       port: 465,
+      // address: '64.31.43.178',
       secure: true,
       auth: {
         user: 'no_reply@bridgeconnect.pk',
-        pass: 'bridge@123'
+        pass: 'Bridge@123.'
         // user: 'Nabeelelahi2000@gmail.com',
         // pass: 'Nabeel@2000'
         // user:'silvertechsolutions19@gmail.com',

@@ -22,6 +22,7 @@ const beneficairyLogin = (req, res) => {
          FROM 
          beneficiary 
          WHERE email = '${email}' 
+         OR phone = '${email}'
          AND 
          password = '${password}'`,
         (result, isError) => {

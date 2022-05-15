@@ -23,7 +23,7 @@ const requestForProfile = (req, res) => {
   } = req.body;
   console.log(req.body);
   sql.customQuery(
-    `SELECT name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, primary_address, secondary_address, city, state, postal_code, gender, status FROM sponsor WHERE OR email = '${email}' OR phone = '${phone}'`,
+    `SELECT name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, primary_address, secondary_address, city, state, postal_code, gender, status FROM sponsor WHERE email = '${email}' OR phone = '${phone}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({
@@ -70,7 +70,8 @@ const login = (req, res) => {
     `SELECT id, name, email, phone, CNIC, status, assigned_doctorId 
          FROM 
          sponsor 
-         WHERE email = '${email}' 
+         WHERE email = '${email}'
+         OR phone = '${email}'
          AND 
          password = '${password}'`,
     (result, isError) => {

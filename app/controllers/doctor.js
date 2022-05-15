@@ -7,7 +7,7 @@ const login = (req, res) => {
   const { email, password } = req.body;
   console.log(req.body);
   sql.customQuery(
-    `SELECT * FROM doctor WHERE email = '${email}' AND  password = '${password}'`,
+    `SELECT * FROM doctor WHERE email = '${email}' OR phone = '${email}' AND  password = '${password}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({ success: true, data: result[0] });
