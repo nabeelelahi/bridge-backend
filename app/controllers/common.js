@@ -2,6 +2,7 @@ const { mail } = require("../services/mail");
 const { sql } = require("../config/db");
 const uid = require("../helpers/uid");
 const pw = require("../helpers/pw");
+const moment = require("moment");
 
 // view service
 
@@ -122,23 +123,61 @@ const requestAppointment = (req, res) => {
        '${status}', 
        '${buyerType}'  
        )              
-     `
+
+
+       `
+
+  function insert() {
+
+    console.log('insert')
+
+    sql.customQuery(
+      query,
+      (result, isError) => {
+        if (!isError) {
+          res.json({
+            success: true,
+            message: "Your appointment has been requested",
+          });
+        } else {
+          res.json({ success: false, error: result });
+        }
+      }
+    );
+
+    return;
+
+  }
 
   sql.customQuery(
-    query,
+    `SELECT date, time, id from purchased_appointments WHERE date = '${date}' AND service_id = '${serviceId}'`,
     (result, isError) => {
-      if (!isError) {
-        res.json({
-          success: true,
-          message: "Your appointment has been requested",
-        });
-      } else {
+      if (!isError && result?.length) {
+        let resLength = 0;
+        result.forEach((item) => {
+          const afterCheckTime = moment(new Date(`${date} ${time}`)).add('15', 'minutes')
+          const beforeCheckTime = moment(new Date(`${date} ${time}`)).subtract('15', 'minutes')
+          const itemTime = new Date(`${item.date} ${item.time}`)
+          const itemRes = moment(itemTime).isBetween(beforeCheckTime, afterCheckTime)
+          if (itemRes) resLength++
+        })
+        if (resLength) {
+          res.json({
+            success: false,
+            message: "This time slot is occupied please select an other time",
+          });
+        }
+        else insert()
+      }
+      else if (!isError && !result?.length) {
+        insert()
+      }
+      else {
         res.json({ success: false, error: result });
       }
-    }
-  );
-
+    });
   return res;
+
 };
 
 const requestMedicine = (req, res) => {
@@ -257,7 +296,6 @@ const requestLabTest = (req, res) => {
        '${buyerType}'  
        )              
      `
-
   sql.customQuery(
     query,
     (result, isError) => {
