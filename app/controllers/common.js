@@ -138,6 +138,7 @@ const requestAppointment = (req, res) => {
           res.json({
             success: true,
             message: "Your appointment has been requested",
+            result
           });
         } else {
           res.json({ success: false, error: result });
@@ -237,6 +238,7 @@ const requestMedicine = (req, res) => {
         res.json({
           success: true,
           message: "Your order has been requested",
+          result
         });
       } else {
         res.json({ success: false, error: result });
@@ -303,6 +305,7 @@ const requestLabTest = (req, res) => {
         res.json({
           success: true,
           message: "Your labtest has been requested",
+          result
         });
       } else {
         res.json({ success: false, error: result });
