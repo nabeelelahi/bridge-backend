@@ -3,6 +3,7 @@ const { sql } = require("../config/db");
 const uid = require("../helpers/uid");
 const pw = require("../helpers/pw");
 const moment = require("moment");
+const { validateDate, validateSponsorShip } = require('../helpers/validate')
 
 // view service
 
@@ -90,51 +91,47 @@ const requestAppointment = (req, res) => {
     createdAt,
   } = req.body;
 
-  const status = 'PENDING';
+  function insert(isFree) {
 
-  const query = `INSERT INTO purchased_appointments 
-  (
-    buyer_id,	
-    service_id,	
-    doctor_id,	
-    service_name,	
-    amount,	
-    discount,	
-    price,	
-    discription,	
-    date,	
-    time,	
-    created_at,	
-    status,	
-    buyer_type
-    )
-     VALUES (
-       '${buyerId}', 
-       '${serviceId}', 
-       '${doctorId}', 
-       '${serviceName}', 
-       '${amount}',  
-       '${discount}',  
-       '${price}',  
-       '${discription}',  
-       '${date}',  
-       '${time}',  
-       '${createdAt}',  
-       '${status}', 
-       '${buyerType}'  
-       )              
+    const paymentAmount = isFree ? 0 : amount
 
-
-       `
-
-  function insert() {
-
-    console.log('insert')
+    const query = `INSERT INTO purchased_appointments 
+    (
+      buyer_id,	
+      service_id,	
+      doctor_id,	
+      service_name,	
+      amount,	
+      discount,	
+      price,	
+      discription,	
+      date,	
+      time,	
+      created_at,	
+      status,	
+      buyer_type
+      )
+       VALUES (
+         '${buyerId}', 
+         '${serviceId}', 
+         '${doctorId}', 
+         '${serviceName}', 
+         '${paymentAmount}',  
+         '${discount}',  
+         '${price}',  
+         '${discription}',  
+         '${date}',  
+         '${time}',  
+         '${createdAt}',  
+         'PENDING', 
+         '${buyerType}'  
+         )`
 
     sql.customQuery(
       query,
       (result, isError) => {
         if (!isError) {
+          result.amount = paymentAmount;
           res.json({
             success: true,
             message: "Your appointment has been requested",
@@ -150,28 +147,52 @@ const requestAppointment = (req, res) => {
 
   }
 
+  function matchTimings(result) {
+
+    let length = 0;
+
+    result.forEach((item) => {
+      const afterCheckTime = moment(new Date(`${date} ${time}`)).add('15', 'minutes')
+      const beforeCheckTime = moment(new Date(`${date} ${time}`)).subtract('15', 'minutes')
+      const itemTime = new Date(`${item.date} ${item.time}`)
+      const itemRes = moment(itemTime).isBetween(beforeCheckTime, afterCheckTime)
+      if (itemRes) return length++
+    })
+
+    return length
+
+  }
+
   sql.customQuery(
     `SELECT date, time, id from purchased_appointments WHERE date = '${date}' AND service_id = '${serviceId}'`,
     (result, isError) => {
       if (!isError && result?.length) {
-        let resLength = 0;
-        result.forEach((item) => {
-          const afterCheckTime = moment(new Date(`${date} ${time}`)).add('15', 'minutes')
-          const beforeCheckTime = moment(new Date(`${date} ${time}`)).subtract('15', 'minutes')
-          const itemTime = new Date(`${item.date} ${item.time}`)
-          const itemRes = moment(itemTime).isBetween(beforeCheckTime, afterCheckTime)
-          if (itemRes) resLength++
-        })
+        let resLength = matchTimings(result);
         if (resLength) {
           res.json({
             success: false,
             message: "This time slot is occupied please select an other time",
           });
         }
-        else insert()
+        else {
+          if (buyerType === 'sponsor' || buyerType === 'beneficiary') {
+            console.log('validateSponsorShip')
+            validateSponsorShip(req, res, 'purchased_appointments', insert)
+          }
+          else {
+            console.log('insert(false)')
+            insert(false)
+          }
+        }
       }
       else if (!isError && !result?.length) {
-        insert()
+        if (buyerType === 'sponsor' || buyerType === 'beneficiary') {
+          validateSponsorShip(req, res, 'purchased_appointments', insert)
+        }
+        else {
+          console.log('false')
+          insert(false)
+        }
       }
       else {
         res.json({ success: false, error: result });
@@ -181,7 +202,7 @@ const requestAppointment = (req, res) => {
 
 };
 
-const requestMedicine = (req, res) => {
+const requestMedicine = async (req, res) => {
 
   const {
     buyerId,
@@ -197,9 +218,11 @@ const requestMedicine = (req, res) => {
     createdAt,
   } = req.body;
 
-  const status = 'PENDING';
+  function insert(isFree) {
 
-  const query = `INSERT INTO purchased_medicines 
+    const paymentAmount = isFree ? 0 : amount
+
+    const query = `INSERT INTO purchased_medicines 
   (
     buyer_id,	
     service_id,	
@@ -219,32 +242,44 @@ const requestMedicine = (req, res) => {
        '${buyerId}', 
        '${serviceId}', 
        '${serviceName}', 
-       '${amount}', 
+       '${paymentAmount}', 
        '${discount}',  
        '${price}',  
        '${date}',
     '${time}',
        '${discription}',
        '${createdAt}',  
-       '${status}', 
+       'PENDING', 
        '${buyerType}'  
-       )              
-     `
+       )`
 
-  sql.customQuery(
-    query,
-    (result, isError) => {
-      if (!isError) {
-        res.json({
-          success: true,
-          message: "Your order has been requested",
-          result
-        });
-      } else {
-        res.json({ success: false, error: result });
+    sql.customQuery(
+      query,
+      (result, isError) => {
+        if (!isError) {
+          result.amount = paymentAmount;
+          res.json({
+            success: true,
+            message: "Your order has been requested",
+            result
+          });
+        } else {
+          res.json({ success: false, error: result });
+        }
       }
-    }
-  );
+    );
+
+
+    return
+
+  }
+
+  if (buyerType === 'sponsor' || buyerType === 'beneficiary') {
+    validateSponsorShip(req, res, 'purchased_medicines', insert)
+  }
+  else {
+    insert(false)
+  }
 
   return res
 
@@ -266,52 +301,64 @@ const requestLabTest = (req, res) => {
     createdAt,
   } = req.body;
 
-  const status = 'PENDING';
+  function insert(isFree) {
 
-  const query = `INSERT INTO purchased_labtests
-  (
-    buyer_id,	
-    service_id,		
-    service_name,	
-    amount,	
-    discount,	
-    price,	
-    discription,	
-    date,	
-    time,	
-    created_at,	
-    status,	
-    buyer_type
-    )
-     VALUES (
-       '${buyerId}', 
-       '${serviceId}', 
-       '${serviceName}', 
-       '${amount}',  
-       '${discount}',  
-       '${price}',  
-       '${discription}',  
-       '${date}',  
-       '${time}',  
-       '${createdAt}',  
-       '${status}', 
-       '${buyerType}'  
-       )              
-     `
-  sql.customQuery(
-    query,
-    (result, isError) => {
-      if (!isError) {
-        res.json({
-          success: true,
-          message: "Your labtest has been requested",
-          result
-        });
-      } else {
-        res.json({ success: false, error: result });
+    const paymentAmount = isFree ? 0 : amount
+
+    const query = `INSERT INTO purchased_labtests
+    (
+      buyer_id,	
+      service_id,		
+      service_name,	
+      amount,	
+      discount,	
+      price,	
+      discription,	
+      date,	
+      time,	
+      created_at,	
+      status,	
+      buyer_type
+      )
+       VALUES (
+         '${buyerId}', 
+         '${serviceId}', 
+         '${serviceName}', 
+         '${paymentAmount}',  
+         '${discount}',  
+         '${price}',  
+         '${discription}',  
+         '${date}',  
+         '${time}',  
+         '${createdAt}',  
+         'PENDING', 
+         '${buyerType}'  
+         )`
+
+    sql.customQuery(
+      query,
+      (result, isError) => {
+        if (!isError) {
+          result.amount = paymentAmount;
+          res.json({
+            success: true,
+            message: "Your labtest has been requested",
+            result
+          });
+        } else {
+          res.json({ success: false, error: result });
+        }
       }
-    }
-  );
+    );
+
+  }
+
+  if (buyerType === 'sponsor' || buyerType === 'beneficiary') {
+    validateSponsorShip(req, res, 'purchased_labtests', insert)
+  }
+  else {
+    insert()
+  }
 
   return res
 
@@ -345,6 +392,7 @@ const getPreviousOrders = (req, res) => {
     status
   FROM ${category} WHERE buyer_id = '${id}' AND buyer_type = '${buyerType}'
   `;
+
 
   sql.customQuery(
     query,
@@ -462,10 +510,13 @@ const getUserStatus = (req, res) => {
   else if (userType === 'sponsor') table = 'sponsor'
 
   sql.customQuery(
-    `SELECT status FROM ${table} WHERE id='${id}'`,
+    `SELECT status, valid_till, valid_from FROM ${table} WHERE id='${id}'`,
     (result, isError) => {
       if (!isError && result?.length) {
-        res.json({ success: true, data: result[0] })
+        const { valid_till, valid_from } = result[0];
+        const isValid = validateDate(valid_from, valid_till, new Date())
+        if(isValid) res.json({ success: true, data: result[0] })
+        else res.json({ succes: true, data: { valid_from, valid_till, status: 'EXPIRED' } })
       } else if (!isError && !result?.length) {
         res.json({ success: false, message: "no requests found" })
       } else {

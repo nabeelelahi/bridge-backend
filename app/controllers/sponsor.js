@@ -67,7 +67,7 @@ const login = (req, res) => {
   const { email, password } = req.body;
   console.log(req.body)
   sql.customQuery(
-    `SELECT id, name, email, phone, CNIC, status, assigned_doctorId 
+    `SELECT id, name, email, phone, CNIC, status, assigned_doctorId, valid_from, valid_till 
          FROM 
          sponsor 
          WHERE email = '${email}'

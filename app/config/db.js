@@ -2,14 +2,14 @@ const mysql = require('mysql')
 const creds = require('./creds')
 
 // const pool = mysql.createPool(creds().PROD_dbCreds)
- 
+
 // pool.on('connection', (res) => {
 //   console.log(pool)
 // })
 
 //  console.log(pool)
 
-const pool =  mysql.createPool(creds().PROD_dbCreds).once('connection', () => {
+const pool = mysql.createPool(creds().DEV_dbCreds).once('connection', () => {
   console.log('DATABASE CONNECTION ESTABLISHED')
 })
 
@@ -105,7 +105,7 @@ const sql = {
     })
   },
   customQuery: (query, cb) => {
-    pool.query(query, (e, result) => {
+    const res = pool.query(query, (e, result) => {
       // prevResultToAppend
       //   ? e
       //     ? cb(e, true)
@@ -115,6 +115,15 @@ const sql = {
       //   : cb(result, false)
       e ? cb(e, true) : cb(result, false)
     })
+    return res
+  },
+  returnDataQuery: async(query) => {
+    let res;
+    pool.query(query, async(e, result) => {
+      if (e) res =  e
+      else res = await result
+    })
+    if(res) console.log(res)
   }
 }
 

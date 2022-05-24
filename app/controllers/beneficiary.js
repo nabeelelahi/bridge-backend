@@ -18,7 +18,9 @@ const beneficairyLogin = (req, res) => {
         CNIC, 
         sponsor_id, 
         status, 
-        assigned_doctorId 
+        assigned_doctorId,
+        valid_from, 
+        valid_till 
          FROM 
          beneficiary 
          WHERE email = '${email}' 
