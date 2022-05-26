@@ -2,6 +2,7 @@ const { mail } = require("../services/mail");
 const { sql } = require("../config/db");
 const uid = require("../helpers/uid");
 const pw = require("../helpers/pw");
+const moment = require('moment')
 
 const requestForProfile = (req, res) => {
   const {
@@ -35,15 +36,16 @@ const requestForProfile = (req, res) => {
         sql.customQuery(
           `INSERT INTO sponsor (id, name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, primary_address, secondary_address, city, state, postal_code, gender, status)
            VALUES ('${uid(
-             16,
-             "-"
-           )}', '${name}', '${email}', '${phone}', '${cnic}', '${age}', '${maritalStatus}', '${frequentCallAllowed}', '${bloodGroup}', '${preferredWayOfContact}', '${primaryAddress}', '${secondaryAddress}', '${city}', '${state}', '${postalCode}', '${gender}', 'PENDING')              
+            16,
+            "-"
+          )}', '${name}', '${email}', '${phone}', '${cnic}', '${age}', '${maritalStatus}', '${frequentCallAllowed}', '${bloodGroup}', '${preferredWayOfContact}', '${primaryAddress}', '${secondaryAddress}', '${city}', '${state}', '${postalCode}', '${gender}', 'PENDING')              
            `,
           (result, isError) => {
             if (!isError) {
               res.json({
                 success: true,
                 message: "request sent successfully",
+                result
               });
             } else {
               res.json({ success: false, error: result });
@@ -173,9 +175,53 @@ const newBeneficiary = (req, res) => {
   return res;
 };
 
+const renewSponsorShip = (req, res) => {
+
+  const { id } = req.params;
+
+  const valid_from = moment(new Date()).format('DD-MMM-YYYY')
+  const valid_till = moment(new Date()).add(1, 'month').format('DD-MMM-YYYY')
+
+  sql.customQuery(
+    `UPDATE sponsor
+       SET 
+       status = 'PENDING',
+       valid_from = '${valid_from}',
+       valid_till = '${valid_till}'
+       WHERE id = '${id}'`,
+    (result, isError) => {
+      if (!isError) {
+        console.log("sponser updated");
+        sql.customQuery(
+          `UPDATE beneficiary
+             SET status = 'PENDING',
+             valid_from = '${valid_from}',
+             valid_till = '${valid_till}'
+             WHERE sponsor_id = '${id}'`,
+          (benResult, benError) => {
+            if (!benError) {
+              console.log("beneficiary updated");
+              res.json({
+                success: true,
+                message: "You're request has been sent. Please proceed to payment.",
+              });
+            } else {
+              res.json({ success: false, error: result });
+            }
+          }
+        );
+      } else {
+        res.json({ success: false, error: result });
+      }
+    }
+  );
+
+}
+
 module.exports = {
   login,
   requestForProfile,
   beneficiaries,
   newBeneficiary,
+  renewSponsorShip
 };

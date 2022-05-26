@@ -509,21 +509,80 @@ const getUserStatus = (req, res) => {
   else if (userType === 'beneficiary') table = 'beneficiary'
   else if (userType === 'sponsor') table = 'sponsor'
 
-  sql.customQuery(
-    `SELECT status, valid_till, valid_from FROM ${table} WHERE id='${id}'`,
-    (result, isError) => {
-      if (!isError && result?.length) {
-        const { valid_till, valid_from } = result[0];
-        const isValid = validateDate(valid_from, valid_till, new Date())
-        if(isValid) res.json({ success: true, data: result[0] })
-        else res.json({ succes: true, data: { valid_from, valid_till, status: 'EXPIRED' } })
-      } else if (!isError && !result?.length) {
-        res.json({ success: false, message: "no requests found" })
-      } else {
-        res.json({ success: false, error: result })
+
+  function update(data){
+
+      sql.customQuery(
+        `UPDATE ${userType}
+         SET 
+         status = 'EXPIRED'
+         WHERE id = '${id}'`,
+        (result, isError) => {
+          if (!isError) {
+            console.log("sponser updated");
+            sql.customQuery(
+              `UPDATE beneficiary
+               SET status = 'EXPIRED'
+               WHERE sponsor_id = '${id}'`,
+              (benResult, benError) => {
+                if (!benError) {
+                  console.log("beneficiary updated");
+                  res.json({
+                    success: true,
+                    message: "Sponsor and it's beneficiaries has been Expired",
+                    data
+                  });
+                } else {
+                  res.json({ success: false, error: benResult });
+                }
+              }
+            );
+          } else {
+            res.json({ success: false, error: result });
+          }
+        }
+      );
+
+  }
+
+
+  if (userType === 'sponsor' || userType === 'beneficiary') {
+
+    sql.customQuery(
+      `SELECT status, valid_till, valid_from FROM ${table} WHERE id='${id}'`,
+      (result, isError) => {
+        if (!isError && result?.length) {
+          const { valid_till, valid_from } = result[0];
+          const isValid = validateDate(valid_from, valid_till, new Date())
+          if (isValid) res.json({ success: true, data: result[0] })
+          else update({ valid_from, valid_till, status: 'EXPIRED' } )
+        } else if (!isError && !result?.length) {
+          res.json({ success: false, message: "no user found" })
+        } else {
+          res.json({ success: false, error: result })
+        }
       }
-    }
-  )
+    )
+
+  }
+  else {
+
+    sql.customQuery(
+      `SELECT status FROM ${table} WHERE id='${id}'`,
+      (result, isError) => {
+        if (!isError && result?.length) {
+          res.json({ success: true, data: result[0] })
+        } else if (!isError && !result?.length) {
+          res.json({ success: false, message: "no user found" })
+        } else {
+          res.json({ success: false, error: result })
+        }
+      }
+    )
+
+  }
+
+
   return res
 
 }

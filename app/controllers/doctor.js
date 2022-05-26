@@ -157,7 +157,6 @@ const getPatients = async (req, res) => {
 const updateHER = (req, res) => {
 
   const {
-    previousHER,
     patientId,
     sugar,
     bloodPressure,
@@ -170,9 +169,7 @@ const updateHER = (req, res) => {
     weight,
   } = req.body
 
-  if (!previousHER) {
-
-    const query = `INSERT INTO her 
+  const query = `INSERT INTO her 
   (
     patientId,
     sugar,
@@ -199,48 +196,21 @@ const updateHER = (req, res) => {
        )              
      `
 
-    sql.customQuery(
-      query,
-      (result, isError) => {
-        if (!isError) {
-          res.json({
-            success: true,
-            message: "HER has been updated successfully",
-          });
-        } else {
-          res.json({ success: false, error: result });
-        }
+  sql.customQuery(
+    query,
+    (result, isError) => {
+      if (!isError) {
+        res.json({
+          success: true,
+          message: "HER has been updated successfully",
+        });
+      } else {
+        res.json({ success: false, error: result });
       }
-    );
+    }
+  );
 
-  }
-  else {
 
-    const query = `UPDATE her SET 
-    sugar = '${sugar}',
-    bloodPressure = '${bloodPressure}',
-    ear = '${ear}',
-    eye = '${eye}',
-    hRate = '${hRate}',
-    height = '${height}',
-    skin = '${skin}',
-    tempreture = '${tempreture}',
-    weight = '${weight}'
-    WHERE patientId = '${patientId}'`
-
-    sql.customQuery(
-      query,
-      (result, isError) => {
-        if (!isError) {
-          res.json({ success: true, message: 'HER has been updated successfully' })
-        }
-        else {
-          res.json({ success: false, error: isError })
-        }
-      }
-    )
-
-  }
 
   return res;
 
