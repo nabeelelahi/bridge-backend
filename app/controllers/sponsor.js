@@ -22,9 +22,12 @@ const requestForProfile = (req, res) => {
     postalCode,
     gender,
   } = req.body;
-  console.log(req.body);
+
+  const valid_from = moment(new Date()).format('DD-MMM-YYYY')
+  const valid_till = moment(new Date()).add(1, 'month').format('DD-MMM-YYYY')
+
   sql.customQuery(
-    `SELECT name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, primary_address, secondary_address, city, state, postal_code, gender, status FROM sponsor WHERE email = '${email}' OR phone = '${phone}'`,
+    `SELECT name, email FROM sponsor WHERE email = '${email}' OR phone = '${phone}'`,
     (result, isError) => {
       if (!isError && result?.length) {
         res.json({
@@ -34,14 +37,54 @@ const requestForProfile = (req, res) => {
         });
       } else if (!isError && !result?.length) {
         sql.customQuery(
-          `INSERT INTO sponsor (id, name, email, phone, cnic, age, marital_status, frequent_call_allowed, blood_group, preferred_way_of_contact, primary_address, secondary_address, city, state, postal_code, gender, status)
+          `INSERT INTO sponsor (
+            id, 
+            name, 
+            email, 
+            phone, 
+            cnic, 
+            age, 
+            marital_status, 
+            frequent_call_allowed, 
+            blood_group, 
+            preferred_way_of_contact, 
+            primary_address, 
+            secondary_address, 
+            city, 
+            state, 
+            postal_code, 
+            gender, 
+            valid_till,
+            valid_from,
+            status
+            )
            VALUES ('${uid(
             16,
             "-"
-          )}', '${name}', '${email}', '${phone}', '${cnic}', '${age}', '${maritalStatus}', '${frequentCallAllowed}', '${bloodGroup}', '${preferredWayOfContact}', '${primaryAddress}', '${secondaryAddress}', '${city}', '${state}', '${postalCode}', '${gender}', 'PENDING')              
+          )}', 
+          '${name}', 
+          '${email}', 
+          '${phone}', 
+          '${cnic}', 
+          '${age}', 
+          '${maritalStatus}', 
+          '${frequentCallAllowed}', 
+          '${bloodGroup}', 
+          '${preferredWayOfContact}', 
+          '${primaryAddress}', 
+          '${secondaryAddress}', 
+          '${city}', 
+          '${state}', 
+          '${postalCode}', 
+          '${gender}',
+          '${valid_till}',
+          '${valid_from}',
+           'PENDING'
+           )              
            `,
           (result, isError) => {
             if (!isError) {
+              result.orderId = `si_${new Date(valid_from).getTime()}`
               res.json({
                 success: true,
                 message: "request sent successfully",
@@ -200,10 +243,10 @@ const renewSponsorShip = (req, res) => {
              WHERE sponsor_id = '${id}'`,
           (benResult, benError) => {
             if (!benError) {
-              console.log("beneficiary updated");
               res.json({
                 success: true,
                 message: "You're request has been sent. Please proceed to payment.",
+                orderId: `si_${new Date(valid_from).getTime()}`
               });
             } else {
               res.json({ success: false, error: result });
