@@ -9,7 +9,7 @@ const creds = require('./creds')
 
 //  console.log(pool)
 
-const pool = mysql.createPool(creds().DEV_dbCreds).once('connection', () => {
+const pool = mysql.createPool(creds().PROD_dbCreds).once('connection', () => {
   console.log('DATABASE CONNECTION ESTABLISHED')
 })
 

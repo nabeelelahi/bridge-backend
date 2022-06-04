@@ -24,7 +24,7 @@ const requestForProfile = (req, res) => {
   } = req.body;
 
   const valid_from = moment(new Date()).format('DD-MMM-YYYY')
-  const valid_till = moment(new Date()).add(1, 'month').format('DD-MMM-YYYY')
+  const valid_till = moment(new Date()).add(3, 'month').format('DD-MMM-YYYY')
 
   sql.customQuery(
     `SELECT name, email FROM sponsor WHERE email = '${email}' OR phone = '${phone}'`,
